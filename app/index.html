@@ -64,6 +64,20 @@ textarea{min-height:80px;resize:vertical}
 label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.03em;flex:1;min-width:0}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:end}
+.ava{width:44px;height:44px;border-radius:10px;flex:none;object-fit:cover;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:22px}
+#esAva{width:72px;height:72px;font-size:32px}
+.staffed{padding-block:12px;border-top:1px solid var(--line)}
+.staffed:first-child{border-top:0;padding-top:0}
+.filebtn{position:relative;overflow:hidden}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;padding:0}
+.shifts{border-collapse:separate;border-spacing:3px;font-size:12px;margin:0 auto}
+.shifts th{font-weight:600;color:var(--muted);text-align:center;padding:0 2px}
+.shifts th.td{color:var(--accent)}
+.shifts tbody th{text-align:left;color:var(--ink);padding-right:6px;white-space:nowrap;font-size:13px}
+.sh{width:32px;height:30px;border-radius:6px;border:1px solid var(--line);background:var(--surface2);color:var(--muted);font:700 13px var(--body);cursor:pointer;padding:0}
+.sh-m{background:var(--ok-soft)!important;color:var(--ok)!important;border-color:transparent!important}
+.sh-e{background:var(--accent-soft)!important;color:var(--accent)!important;border-color:transparent!important}
+.sh-f{background:var(--warn-soft)!important;color:var(--warn)!important;border-color:transparent!important}
 .stats.s3{grid-template-columns:repeat(3,1fr)}
 .stats.s3 .stat b{font-size:22px;overflow-wrap:anywhere}
 .off{opacity:.55}
@@ -290,7 +304,7 @@ clients:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s
 aclasses:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/>',
 anews:'<path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7.5 9h6M7.5 12.5h6M7.5 16h4"/>'};
 // owner: hidden role (5 taps on the logo + PIN). Starts with the admin tabs; owner-only tabs get added here.
-const TABS={client:['home','schedule','log','info'],admin:['clients','aclasses','anews'],owner:['clients','aclasses','anews','reports','settings']};
+const TABS={client:['home','schedule','log','info'],admin:['clients','aclasses','anews'],owner:['clients','aclasses','anews','reports','staff','settings']};
 const OWNER_PIN='1234'; // demo only; the real app authenticates the owner on the server
 
 function renderChrome(){
@@ -301,7 +315,7 @@ function renderChrome(){
   document.querySelectorAll('#langSeg button').forEach(b=>b.classList.toggle('on',b.dataset.lang===S.lang));
   document.querySelectorAll('#roleSeg button').forEach(b=>{b.textContent=t(b.dataset.role);b.classList.toggle('on',b.dataset.role===S.role);if(b.dataset.role==='owner')b.hidden=S.role!=='owner';});
   if(!TABS[S.role].includes(ui.tab))ui.tab=TABS[S.role][0];
-  document.getElementById('tabs').classList.toggle('n5',TABS[S.role].length>4);document.getElementById('tabs').innerHTML=TABS[S.role].map(k=>`<button data-tab="${k}" class="${k===ui.tab?'on':''}"><svg viewBox="0 0 24 24">${ICON[k]}</svg>${t(k)}</button>`).join('');
+  document.getElementById('tabs').classList.toggle('n5',TABS[S.role].length>4);document.getElementById('tabs').innerHTML=TABS[S.role].map(k=>`<button data-tab="${k}" class="${k===ui.tab?'on':''}"><svg viewBox="0 0 24 24">${ICON[k]}</svg>${T[S.lang][k+'_tab']||t(k)}</button>`).join('');
 }
 function render(){renderChrome();document.getElementById('view').innerHTML=V[ui.tab]();after();}
 function after(){if(ui.tab==='clients')renderClientList();}
@@ -529,7 +543,7 @@ function ensureOwnerData(){
   S.settings=Object.assign({lowVisits:2,lowDays:5,cancelHours:3,noShowCharge:false,schedDays:7,remindDays:3,remindVisits:2,classRemind:2,provider:'liqpay',fiscal:false},S.settings||{});
   S.plans.forEach(p=>{if(p.online==null)p.online=p.id!=='p1';if(p.active==null)p.active=true;});
   S.clients.forEach((c,i)=>{if(!c.since)c.since=iso(addDays(TODAY,-(8+i*23)));});
-  if(!S.staff)S.staff=[{id:'s1',name:'Тетяна',phone:'+380 96 505 8801',role:'owner',active:true},{id:'s2',name:'Наталія',phone:'+380 67 000 00 01',role:'admin',active:true},{id:'s3',name:'Ігор',phone:'+380 67 000 00 02',role:'admin',active:true},{id:'s4',name:'Сергій',phone:'+380 67 000 00 03',role:'trainer',active:true},{id:'s5',name:'Віктор',phone:'+380 67 000 00 04',role:'trainer',active:true},{id:'s6',name:'Олена',phone:'+380 67 000 00 05',role:'trainer',active:true}];
+  if(!S.staff||!S.staff.every(s=>Array.isArray(s.roles)))S.staff=seedStaff();
   if(!S.sales){S.sales=[];const w=[['p1',.25],['p8',.3],['p12',.3],['pU',.15]],ms=['cash','card','online'],by=['Наталія','Ігор'];
     for(let i=89;i>=0;i--){const n=Math.floor(R()*4);for(let j=0;j<n;j++){let x=R(),pid='p1';for(const [id,wt] of w){if((x-=wt)<0){pid=id;break;}}const p=plan(pid);if(!p)continue;
       S.sales.push({id:uid(),date:iso(addDays(TODAY,-i)),plan:pid,name:p.name,price:p.price,method:ms[Math.floor(R()*3)],by:by[Math.floor(R()*2)],renew:pid!=='p1'&&R()<.7});}}}
@@ -595,12 +609,80 @@ V.settings=function(){
   <div class="sec"><h3>${t('bookRules')}</h3><div class="panel stack" style="gap:10px"><div class="grid2">${num('cancelHours',t('cancelHours'))}${num('schedDays',t('schedDays'),1)}</div><div class="chips">${chk('noShowCharge',t('noShowCharge'))}</div></div></div>
   <div class="sec"><h3>${t('reminders')}</h3><div class="panel stack" style="gap:10px"><div class="grid3">${num('remindDays',t('remindDays'))}${num('remindVisits',t('remindVisits'))}${num('classRemind',t('classRemind'))}</div><div class="small muted">${t('quiet')}</div></div></div>
   <div class="sec"><h3>${t('payment')}</h3><div class="panel stack" style="gap:10px"><label class="f">${t('provider')}<select data-set="provider">${[['liqpay','LiqPay'],['wayforpay','WayForPay'],['mono','plata by mono']].map(([v,l])=>`<option value="${v}" ${st.provider===v?'selected':''}>${l}</option>`).join('')}</select></label><div class="chips">${chk('fiscal',t('fiscal'))}</div><div class="small muted">${t('payNote')}</div></div></div>
-  <div class="sec"><h3>${t('staff')}</h3><div class="panel">${S.staff.map(s=>`<div class="item${s.active?'':' off'}"><div class="body"><b>${esc(s.name)}</b><span class="small muted num">${esc(s.phone)}</span></div>
-    <select data-staff="${s.id}" data-f="role" style="width:auto">${['owner','admin','trainer'].map(r=>`<option value="${r}" ${s.role===r?'selected':''}>${t('rl_'+r)}</option>`).join('')}</select>
-    <label class="small" style="display:flex;gap:4px;align-items:center"><input type="checkbox" data-staff="${s.id}" data-f="active" ${s.active?'checked':''} style="width:auto">${t('staffOn')}</label></div>`).join('')}</div>
-    <div class="panel stack" style="gap:10px"><strong>${t('addStaff')}</strong><div class="grid2"><label class="f">${t('name')}<input id="stName"></label><label class="f">${t('phone')}<input id="stPhone" type="tel" inputmode="tel"></label></div>
-    <div class="row"><select id="stRole" style="width:auto">${['admin','trainer','owner'].map(r=>`<option value="${r}">${t('rl_'+r)}</option>`).join('')}</select><div class="spacer"></div><button class="btn primary" data-a="addstaff">${t('add')}</button></div></div></div>
   <div class="sec"><h3>${t('actLog')}</h3><div class="panel">${S.log.length?S.log.slice(0,50).map(l=>`<div class="item"><div class="t small num" style="font-size:13px;min-width:86px">${fmt(l.ts.slice(0,10))} ${l.ts.slice(11,16)}</div><div class="body"><span class="small muted">${esc(l.who)}</span><div>${esc(l.txt)}</div></div></div>`).join(''):`<div class="empty">${t('noLog')}</div>`}</div></div>`;
+};
+
+/* ===== Staff & shifts (owner tab «Персонал»). Trainers/admins marked «на сайті» feed the landing's Team section (same site, shared storage). ===== */
+Object.assign(T.uk,{staff:'Персонал',staff_tab:'Персонал',settings_tab:'Параметри',staffH:'Персонал і графік',staffHint:'Працівники, їхні ролі та зміни. Тренери й адміністрація з позначкою «На сайті» показуються на лендінгу разом із фото.',
+ onShiftToday:'Сьогодні на зміні',nobodyShift:'На сьогодні змін не призначено.',team:'Команда',addEmp:'+ працівник',edit:'Змінити',uploadPhoto:'Завантажити фото',removePhoto:'Прибрати фото',
+ roles:'Ролі',rightsHint:'Власник: усе, а також звіти й налаштування. Адміністратор: клієнти, візити, продаж, розклад, новини. Тренер: свої заняття й відмітка присутності, без фінансів.',
+ posUk:'Посада UA',posRu:'Посада RU',specUk:'Спеціалізація UA (через кому)',specRu:'Спеціалізація RU (через кому)',years:'Досвід, років',onSite:'На сайті',save:'Зберегти',cancelB:'Скасувати',needName:'Вкажіть ім’я',needRole:'Оберіть хоча б одну роль',
+ weekShifts:'Графік змін на тиждень',shiftHint:'Натискайте на клітинку, щоб змінити зміну.',sh_m:'Ранкова 08:00–14:00',sh_e:'Вечірня 13:00–19:00',sh_f:'Повний день 08:00–19:00',shc_m:'Р',shc_e:'В',shc_f:'П',shOff:'вихідний',
+ lgStaff:'Змінено працівника',lgStaffDel:'Видалено працівника',lgShift:'Графік',photoErr:'Не вдалося прочитати фото'});
+Object.assign(T.ru,{staff:'Персонал',staff_tab:'Персонал',settings_tab:'Настройки',staffH:'Персонал и график',staffHint:'Сотрудники, их роли и смены. Тренеры и администрация с отметкой «На сайте» показываются на лендинге вместе с фото.',
+ onShiftToday:'Сегодня на смене',nobodyShift:'На сегодня смены не назначены.',team:'Команда',addEmp:'+ сотрудник',edit:'Изменить',uploadPhoto:'Загрузить фото',removePhoto:'Убрать фото',
+ roles:'Роли',rightsHint:'Владелец: всё, а также отчёты и настройки. Администратор: клиенты, визиты, продажа, расписание, новости. Тренер: свои занятия и отметка присутствия, без финансов.',
+ posUk:'Должность UA',posRu:'Должность RU',specUk:'Специализация UA (через запятую)',specRu:'Специализация RU (через запятую)',years:'Опыт, лет',onSite:'На сайте',save:'Сохранить',cancelB:'Отмена',needName:'Укажите имя',needRole:'Выберите хотя бы одну роль',
+ weekShifts:'График смен на неделю',shiftHint:'Нажимайте на ячейку, чтобы изменить смену.',sh_m:'Утренняя 08:00–14:00',sh_e:'Вечерняя 13:00–19:00',sh_f:'Полный день 08:00–19:00',shc_m:'У',shc_e:'В',shc_f:'П',shOff:'выходной',
+ lgStaff:'Изменён сотрудник',lgStaffDel:'Удалён сотрудник',lgShift:'График',photoErr:'Не удалось прочитать фото'});
+ICON.staff='<circle cx="12" cy="7.5" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2M3 12h3M18 12h3"/>';
+function seedStaff(){
+  const P=(uk,ru)=>({uk,ru}),sh=s=>s.split('').map(c=>c==='-'?'':c);
+  return [
+   {id:'s1',name:'Тетяна',phone:'+380 96 505 8801',roles:['owner'],pos:P('Керівник залу','Руководитель зала'),shifts:sh('fff-f--')},
+   {id:'s2',name:'Наталія',phone:'+380 67 000 00 01',roles:['admin'],pos:P('Адміністраторка, ранкова зміна','Администратор, утренняя смена'),shifts:sh('mmmmmm-')},
+   {id:'s3',name:'Ігор',phone:'+380 67 000 00 02',roles:['admin','trainer'],pos:P('Адміністратор і тренер','Администратор и тренер'),spec:P('Силові тренування','Силовые тренировки'),years:4,shifts:sh('eeeee-f')},
+   {id:'s4',name:'Сергій',phone:'+380 67 000 00 03',roles:['trainer'],pos:P('Старший тренер','Старший тренер'),spec:P('Функціональний тренінг, Кросфіт','Функциональный тренинг, Кроссфит'),years:9,shifts:sh('mem-m--')},
+   {id:'s5',name:'Віктор',phone:'+380 67 000 00 04',roles:['trainer'],pos:P('Тренер з силової підготовки','Тренер по силовой подготовке'),spec:P('Техніка базових вправ, Підлітки','Техника базовых упражнений, Подростки'),years:12,shifts:sh('eeeee--')},
+   {id:'s6',name:'Олена',phone:'+380 67 000 00 05',roles:['trainer'],pos:P('Тренерка групових програм','Тренер групповых программ'),spec:P('Пілатес, Стретчинг, Жіноча група','Пилатес, Стретчинг, Женская группа'),years:7,shifts:sh('-m-m-m-')},
+   {id:'s7',name:'Марія',phone:'+380 67 000 00 06',roles:['trainer'],pos:P('Фітнес-тренерка','Фитнес-тренер'),spec:P('Фітнес, Дитячий фітнес','Фитнес, Детский фитнес'),years:5,shifts:sh('e-e-e--')},
+   {id:'s8',name:'Андрій',phone:'+380 67 000 00 07',roles:['trainer'],pos:P('Тренер з воркауту','Тренер по воркауту'),spec:P('Воркаут, Підлітки','Воркаут, Подростки'),years:6,shifts:sh('-e-e-m-')}
+  ].map(s=>Object.assign({active:true,site:true,photo:'',spec:P('',''),years:0},s));
+}
+const blankStaff=()=>({id:uid(),name:'',phone:'',roles:['trainer'],pos:{uk:'',ru:''},spec:{uk:'',ru:''},years:0,photo:'',active:true,site:true,shifts:Array(7).fill('')});
+const rolesTxt=s=>(s.roles||[]).map(r=>t('rl_'+r)).join(' + ');
+const ava=(s,id)=>s.photo?`<img class="ava" ${id?`id="${id}"`:''} src="${s.photo}" alt="">`:`<div class="ava" ${id?`id="${id}"`:''}>${esc((s.name||'?')[0])}</div>`;
+function setAvaDraft(){const el=document.getElementById('esAva'),s=S.staff.find(x=>x.id===ui.editStaff);if(!el||!s)return;el.outerHTML=ava({name:val('esName')||s.name,photo:ui.photoDraft},'esAva');}
+function loadPhoto(file){
+  const r=new FileReader();
+  r.onload=()=>{const img=new Image();img.onload=()=>{const n=Math.min(img.width,img.height),c=document.createElement('canvas');c.width=c.height=320;
+    c.getContext('2d').drawImage(img,(img.width-n)/2,(img.height-n)/2,n,n,0,0,320,320);ui.photoDraft=c.toDataURL('image/jpeg',.82);setAvaDraft();};
+    img.onerror=()=>toast(t('photoErr'));img.src=r.result;};
+  r.onerror=()=>toast(t('photoErr'));r.readAsDataURL(file);
+}
+function saveStaff(id){
+  const s=S.staff.find(x=>x.id===id);if(!s)return false;
+  const name=val('esName'),roles=['owner','admin','trainer'].filter(r=>document.getElementById('esR_'+r)?.checked);
+  if(!name){toast(t('needName'));return false;}
+  if(!roles.length){toast(t('needRole'));return false;}
+  Object.assign(s,{name,phone:val('esPhone'),roles,pos:{uk:val('esPosUk'),ru:val('esPosRu')},spec:{uk:val('esSpecUk'),ru:val('esSpecRu')},years:Math.max(0,+val('esYears')||0),
+    site:document.getElementById('esSite').checked,active:document.getElementById('esActive').checked});
+  if(ui.photoDraft!==undefined)s.photo=ui.photoDraft;
+  logAct(`${ui.newStaff?t('lgStaffAdd'):t('lgStaff')}: ${name} (${rolesTxt(s)})`);
+  ui.editStaff=null;ui.newStaff=null;ui.photoDraft=undefined;
+  try{localStorage.setItem(LS,JSON.stringify(S));toast(t('saved'));}catch(e){toast(t('photoErr'));}
+  return true;
+}
+V.staff=function(){
+  const td=dow(TODAY),on=S.staff.filter(s=>s.active&&s.shifts&&s.shifts[td]);
+  const editor=s=>{const ph=ui.photoDraft!==undefined?ui.photoDraft:s.photo,armed=ui.armed==='s'+s.id;
+    return `<div class="staffed stack" style="gap:10px">
+    <div class="row">${ava({name:s.name,photo:ph},'esAva')}<div class="row wrap" style="gap:6px"><label class="btn sm filebtn">${t('uploadPhoto')}<input type="file" accept="image/*" id="esPhoto"></label><button class="btn sm ghost" data-a="photodel">${t('removePhoto')}</button></div></div>
+    <div class="grid2"><label class="f">${t('name')}<input id="esName" value="${esc(s.name)}"></label><label class="f">${t('phone')}<input id="esPhone" type="tel" inputmode="tel" value="${esc(s.phone)}"></label></div>
+    <div class="f">${t('roles')}<div class="chips" style="margin-top:4px">${['owner','admin','trainer'].map(r=>`<label><input type="checkbox" id="esR_${r}" ${(s.roles||[]).includes(r)?'checked':''}>${t('rl_'+r)}</label>`).join('')}</div><span class="small muted" style="font-weight:400">${t('rightsHint')}</span></div>
+    <div class="grid2"><label class="f">${t('posUk')}<input id="esPosUk" value="${esc(s.pos?.uk)}"></label><label class="f">${t('posRu')}<input id="esPosRu" value="${esc(s.pos?.ru)}"></label></div>
+    <div class="grid2"><label class="f">${t('specUk')}<input id="esSpecUk" value="${esc(s.spec?.uk)}"></label><label class="f">${t('specRu')}<input id="esSpecRu" value="${esc(s.spec?.ru)}"></label></div>
+    <div class="grid2"><label class="f">${t('years')}<input id="esYears" type="number" min="0" value="${esc(s.years||'')}"></label><div class="chips" style="align-self:end"><label><input type="checkbox" id="esSite" ${s.site!==false?'checked':''}>${t('onSite')}</label><label><input type="checkbox" id="esActive" ${s.active?'checked':''}>${t('staffOn')}</label></div></div>
+    <div class="row wrap">${ui.newStaff===s.id?'':`<button class="btn sm danger" data-a="staffdel" data-k="${s.id}">${armed?t('confirm'):t('del')}</button>`}<div class="spacer"></div><button class="btn sm ghost" data-a="staffcancel">${t('cancelB')}</button><button class="btn sm primary" data-a="staffsave" data-k="${s.id}">${t('save')}</button></div></div>`;};
+  const row=s=>`<div class="item${s.active?'':' off'}">${ava(s)}<div class="body"><b>${esc(s.name)}</b><span class="small muted">${esc(rolesTxt(s))}${tr(s.pos)?' · '+esc(tr(s.pos)):''}</span><span class="small muted num" style="display:block">${esc(s.phone||'')}${s.site!==false&&(s.roles.includes('trainer')||s.roles.includes('admin')||s.roles.includes('owner'))?` · ${t('onSite')}`:''}</span></div><button class="btn sm" data-a="staffedit" data-k="${s.id}">${t('edit')}</button></div>`;
+  const act=S.staff.filter(s=>s.active&&s.name);
+  return `<div class="sec"><h2>${t('staffH')}</h2><p class="small muted" style="margin:0">${t('staffHint')}</p></div>
+  <div class="sec"><h3>${t('onShiftToday')}</h3><div class="panel">${on.length?on.map(s=>`<div class="item">${ava(s)}<div class="body"><b>${esc(s.name)}</b><span class="small muted">${esc(rolesTxt(s))}</span></div><span class="pill acc">${t('sh_'+s.shifts[td])}</span></div>`).join(''):`<div class="empty">${t('nobodyShift')}</div>`}</div></div>
+  <div class="sec"><div class="row"><h3>${t('team')}</h3><div class="spacer"></div>${ui.editStaff?'':`<button class="btn sm primary" data-a="staffnew">${t('addEmp')}</button>`}</div>
+   <div class="panel">${S.staff.map(s=>ui.editStaff===s.id?editor(s):row(s)).join('')}</div></div>
+  <div class="sec"><h3>${t('weekShifts')}</h3><div class="panel"><div class="heatwrap"><table class="shifts"><thead><tr><th></th>${t('wd').map((w,i)=>`<th class="${i===td?'td':''}">${w}</th>`).join('')}</tr></thead><tbody>
+   ${act.map(s=>`<tr><th>${esc(s.name)}</th>${[0,1,2,3,4,5,6].map(i=>{const v=(s.shifts||[])[i]||'';return `<td><button class="sh sh-${v||'x'}" data-a="shift" data-k="${s.id}" data-d="${i}" title="${v?t('sh_'+v):t('shOff')}">${v?t('shc_'+v):'·'}</button></td>`;}).join('')}</tr>`).join('')}</tbody></table></div>
+   <div class="small muted" style="margin-top:10px">${t('shiftHint')}</div><div class="chips" style="margin-top:6px">${['m','e','f'].map(v=>`<span class="pill sh-${v}" style="text-transform:none;letter-spacing:0">${t('shc_'+v)} · ${t('sh_'+v)}</span>`).join('')}</div></div></div>`;
 };
 
 function ownerChange(el){
@@ -611,8 +693,7 @@ function ownerChange(el){
     else if(f==='visits')p.visits=el.value===''?null:Math.max(1,+el.value||1);
     else p[f]=Math.max(0,+el.value||0);
     logAct(`${t('lgPlan')} «${tr(p.name)}»: ${(el.closest('label')?.textContent||f).trim()}`);save();toast(t('saved'));if(f==='active')render();return;}
-  if(el.dataset.staff){const s=S.staff.find(x=>x.id===el.dataset.staff);if(!s)return;const f=el.dataset.f;s[f]=f==='active'?el.checked:el.value;
-    logAct(`${t('lgStaff')}: ${s.name} → ${f==='active'?(s.active?t('staffOn'):'—'):t('rl_'+s.role)}`);save();toast(t('saved'));render();}
+  if(el.id==='esPhoto'&&el.files&&el.files[0])loadPhoto(el.files[0]);
 }
 function exportCsv(kind){
   const from=periodFrom();let rows;
@@ -681,7 +762,14 @@ document.addEventListener('click',e=>{
   case'rp': ui.rp=b.dataset.p;break;
   case'csv': exportCsv(b.dataset.k);return;
   case'addplan':{const p={id:uid(),name:{uk:'Новий тариф',ru:'Новый тариф'},price:0,visits:8,days:30,online:false,active:true};S.plans.push(p);logAct(t('lgPlanAdd'));save();break;}
-  case'addstaff':{const n=val('stName'),ph=val('stPhone'),r=val('stRole');if(!n||!ph){toast(t('fillAll'));return;}S.staff.push({id:uid(),name:n,phone:ph,role:r,active:true});logAct(t('lgStaffAdd')+': '+n+' ('+t('rl_'+r)+')');save();toast(t('addedC'));break;}
+  case'staffnew':{const s=blankStaff();S.staff.push(s);ui.editStaff=s.id;ui.newStaff=s.id;ui.photoDraft=undefined;break;}
+  case'staffedit': ui.editStaff=b.dataset.k;ui.newStaff=null;ui.photoDraft=undefined;break;
+  case'staffcancel':{if(ui.newStaff){S.staff=S.staff.filter(x=>x.id!==ui.newStaff);ui.newStaff=null;}ui.editStaff=null;break;}
+  case'staffsave': if(!saveStaff(b.dataset.k))return;break;
+  case'staffdel':{if(armed!=='s'+b.dataset.k){ui.armed='s'+b.dataset.k;break;}const s=S.staff.find(x=>x.id===b.dataset.k);S.staff=S.staff.filter(x=>x.id!==b.dataset.k);if(s&&s.name)logAct(t('lgStaffDel')+': '+s.name);ui.editStaff=null;ui.newStaff=null;save();toast(t('deleted'));break;}
+  case'photodel': ui.photoDraft='';setAvaDraft();return;
+  case'shift':{const s=S.staff.find(x=>x.id===b.dataset.k),i=+b.dataset.d,o=['','m','e','f'];if(!s)return;s.shifts=s.shifts||Array(7).fill('');s.shifts[i]=o[(o.indexOf(s.shifts[i]||'')+1)%4];
+    logAct(`${t('lgShift')}: ${s.name}, ${t('wd')[i]} → ${s.shifts[i]?t('sh_'+s.shifts[i]):t('shOff')}`);save();break;}
   case'addclass':{const title=val('kTitle'),tri=val('kTrainer'),time=val('kTime'),days=[0,1,2,3,4,5,6].filter(i=>document.getElementById('kd'+i).checked);
     if(!title||!tri||!time||!days.length){toast(t('fillAll'));return;}
     S.classes.push({id:uid(),days,time,dur:+val('kDur')||60,title,trainer:tri,cap:+val('kCap')||8});logAct(t('lgClassAdd')+': '+title);save();toast(t('addedK'));break;}

@@ -178,7 +178,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .tm:target,.tm.flash{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .trlink{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .trlink:hover{text-decoration-thickness:2px}
-.mono{width:48px;height:48px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:24px}
+.mono img{width:100%;height:100%;object-fit:cover;display:block}
+.mono{width:64px;height:64px;border-radius:12px;overflow:hidden;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:24px}
 .tm h3{font-size:22px}
 .tm .role{font-size:14px;color:var(--muted)}
 .tm .tags{display:flex;flex-wrap:wrap;gap:4px}
@@ -387,6 +388,19 @@ ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Цены, расписание, т�
 };
 const TRN={'Сергій':'Сергей','Віктор':'Виктор','Олена':'Елена','Марія':'Мария','Андрій':'Андрей','Тетяна':'Татьяна','Наталія':'Наталья','Ігор':'Игорь'};
 
+/* Team from the app (same site → shared browser storage): staff the owner marked «На сайті», with photos.
+   In the real product this comes from the server API. Falls back to the demo data above. */
+try{
+  const A=JSON.parse(localStorage.getItem('zal-app-v1')||'null');
+  if(A&&Array.isArray(A.staff)&&A.staff.length&&A.staff.every(s=>Array.isArray(s.roles))){
+    const list=A.staff.filter(s=>s.active!==false&&s.site!==false&&s.name);
+    const split=x=>String(x||'').split(',').map(v=>v.trim()).filter(Boolean);
+    const trs=list.filter(s=>s.roles.includes('trainer'));
+    if(trs.length)C.trainers=trs.map(s=>({n:s.name,r:{uk:s.pos?.uk||'Тренер',ru:s.pos?.ru||s.pos?.uk||'Тренер'},s:{uk:split(s.spec?.uk),ru:split(s.spec?.ru||s.spec?.uk)},y:s.years||0,photo:s.photo||''}));
+    const adm=list.filter(s=>s.roles.includes('admin')||s.roles.includes('owner'));
+    if(adm.length)C.staff=adm.map(s=>({n:s.name,r:{uk:s.pos?.uk||(s.roles.includes('owner')?'Керівник залу':'Адміністратор'),ru:s.pos?.ru||s.pos?.uk||(s.roles.includes('owner')?'Руководитель зала':'Администратор')}}));
+  }
+}catch(e){}
 let lang='uk';
 try{const s=localStorage.getItem('zal-landing-lang');if(s==='uk'||s==='ru')lang=s;}catch(e){}
 const L=()=>T[lang];
@@ -455,8 +469,8 @@ function render(){
    <div class="col"><h3>${l.kids}</h3>${C.kids.map(c=>cls(c,true)).join('')}</div></div>`;
 
   document.getElementById('teamIn').innerHTML=head(l.teamEy,l.teamH,l.teamP)+`
-   <div class="team">${C.trainers.map((t,i)=>`<div class="tm" id="tr-${i}"><div class="mono">${esc(nm(t.n)[0])}</div><div><h3>${esc(nm(t.n))}</h3><div class="role">${esc(tr(t.r))}</div></div>
-    <div class="tags">${tr(t.s).map(s=>`<span class="pill">${esc(s)}</span>`).join('')}</div><div class="yrs num">${t.y} ${l.yrs}</div></div>`).join('')}</div>
+   <div class="team">${C.trainers.map((t,i)=>`<div class="tm" id="tr-${i}"><div class="mono">${t.photo?`<img src="${t.photo}" alt="${esc(nm(t.n))}">`:esc(nm(t.n)[0])}</div><div><h3>${esc(nm(t.n))}</h3><div class="role">${esc(tr(t.r))}</div></div>
+    <div class="tags">${tr(t.s).map(s=>`<span class="pill">${esc(s)}</span>`).join('')}</div>${t.y?`<div class="yrs num">${t.y} ${l.yrs}</div>`:''}</div>`).join('')}</div>
    <div class="staff"><h3>${l.staffH}</h3><div class="stafflist">${C.staff.map(s=>`<div><b>${esc(nm(s.n))}</b><span>${esc(tr(s.r))}</span></div>`).join('')}</div></div>`;
 
   document.getElementById('priceIn').innerHTML=head(l.prEy,l.prH,l.prP)+`
