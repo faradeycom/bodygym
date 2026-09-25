@@ -82,6 +82,8 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mu
 .qrbtn svg{width:112px;height:112px;display:block}
 .ov{position:fixed;inset:0;z-index:20;background:rgba(10,13,17,.94);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
 .ov.light{background:#fff}
+#brand{user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;cursor:default}
+.ov .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .ovin{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:420px;color:#F2F5F7;text-align:center}
 .ov.light .ovin{color:#14181B}
 .ov .btn{background:transparent;color:inherit;border-color:currentColor}
@@ -143,16 +145,17 @@ nav.tabs button.on{color:var(--accent)}
 
 <div class="app">
   <header class="top">
-    <div class="brand">BODY GYM<small id="sub"></small></div>
+    <div class="brand" id="brand">BODY GYM<small id="sub"></small></div>
     <div class="spacer"></div>
     <div class="seg" id="langSeg"><button data-lang="uk">UA</button><button data-lang="ru">RU</button></div>
-    <div class="seg" id="roleSeg"><button data-role="client"></button><button data-role="admin"></button></div>
+    <div class="seg" id="roleSeg"><button data-role="client"></button><button data-role="admin"></button><button data-role="owner" hidden></button></div>
   </header>
   <div class="demo"><span id="demoTxt"></span><button class="btn sm ghost" data-a="reset" id="resetBtn"></button></div>
   <main id="view" class="stack"></main>
 </div>
 <nav class="tabs"><div class="in" id="tabs"></div></nav>
 <div class="toast" id="toast" hidden></div>
+<div class="ov" id="pinOv" hidden><div class="ovin"><strong id="pinTitle"></strong><input id="pinIn" type="password" inputmode="numeric" maxlength="8" autocomplete="off" style="max-width:200px;text-align:center;font-size:22px;letter-spacing:.3em"><p id="pinMsg" style="margin:0;min-height:1.5em;font-size:14px"></p><div class="row"><button class="btn" data-a="closepin" id="pinCancel"></button><button class="btn primary" data-a="pinok" id="pinOk"></button></div></div></div>
 <div class="ov" id="scanOv" hidden><div class="ovin"><strong id="scanTitle"></strong><video id="scanVid" playsinline muted></video><p id="scanMsg"></p><button class="btn" data-a="closescan" id="scanClose"></button></div></div>
 <div class="ov light" id="qrOv" hidden><div class="ovin"><div id="qrBig"></div><div class="memno num" id="qrNo"></div><button class="btn" data-a="closeqr" id="qrClose"></button></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
@@ -162,7 +165,7 @@ nav.tabs button.on{color:var(--accent)}
 (function(){
 const LS='zal-app-v1';
 const T={
-uk:{sub:'клієнтський застосунок',client:'Клієнт',admin:'Адмін',demo:'Демо-режим: дані прикладу, зберігаються лише на цьому пристрої.',reset:'Скинути демо',resetAsk:'Точно скинути?',resetDone:'Демо-дані відновлено',
+uk:{sub:'клієнтський застосунок',client:'Клієнт',admin:'Адмін',owner:'Власник',pinTitle:'Вхід власника',pinHint:'Введіть PIN-код',pinWrong:'Невірний PIN-код',enter:'Увійти',ownerIn:'Режим власника',demo:'Демо-режим: дані прикладу, зберігаються лише на цьому пристрої.',reset:'Скинути демо',resetAsk:'Точно скинути?',resetDone:'Демо-дані відновлено',
 home:'Головна',schedule:'Розклад',log:'Тренування',info:'Про зал',clients:'Клієнти',aclasses:'Заняття',anews:'Новини',
 hello:'Привіт',membership:'Абонемент',left:'відвідувань залишилось',unlimited:'Безліміт',until:'Діє до',daysLeft:'дн. залишилось',expired:'Закінчився',active:'Активний',low:'Закінчується',
 memno:'Номер клієнта',showDesk:'Покажіть номер на рецепції при вході',myBook:'Мої записи',noBook:'Ви ще нікуди не записані.',toSchedule:'Відкрити розклад',news:'Новини залу',visits:'Останні візити',noVisits:'Візитів ще не було.',
@@ -174,7 +177,7 @@ qrHint:'Покажіть QR-код адміністратору на вході'
 bookedList:'Записані',nobody:'Поки ніхто.',newClass:'Нове заняття',title:'Назва',time:'Час',dur:'Тривалість, хв',trainer:'Тренер',cap:'Місць',days:'Дні',addedK:'Заняття додано',del:'Видалити',confirm:'Підтвердити?',deleted:'Видалено',
 newNews:'Нова новина',text:'Текст',publish:'Опублікувати',published:'Опубліковано',fillAll:'Заповніть усі поля',
 wd:['Пн','Вт','Ср','Чт','Пт','Сб','Нд'],today:'Сьогодні',loc:'uk-UA',cur:'₴'},
-ru:{sub:'приложение для клиентов',client:'Клиент',admin:'Админ',demo:'Демо-режим: данные примера, хранятся только на этом устройстве.',reset:'Сбросить демо',resetAsk:'Точно сбросить?',resetDone:'Демо-данные восстановлены',
+ru:{sub:'приложение для клиентов',client:'Клиент',admin:'Админ',owner:'Владелец',pinTitle:'Вход владельца',pinHint:'Введите PIN-код',pinWrong:'Неверный PIN-код',enter:'Войти',ownerIn:'Режим владельца',demo:'Демо-режим: данные примера, хранятся только на этом устройстве.',reset:'Сбросить демо',resetAsk:'Точно сбросить?',resetDone:'Демо-данные восстановлены',
 home:'Главная',schedule:'Расписание',log:'Тренировки',info:'О зале',clients:'Клиенты',aclasses:'Занятия',anews:'Новости',
 hello:'Привет',membership:'Абонемент',left:'посещений осталось',unlimited:'Безлимит',until:'Действует до',daysLeft:'дн. осталось',expired:'Закончился',active:'Активен',low:'Заканчивается',
 memno:'Номер клиента',showDesk:'Покажите номер на ресепшене при входе',myBook:'Мои записи',noBook:'Вы пока никуда не записаны.',toSchedule:'Открыть расписание',news:'Новости зала',visits:'Последние визиты',noVisits:'Визитов ещё не было.',
@@ -269,7 +272,9 @@ info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
 clients:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5c2 .6 3.2 2.5 3.6 5.5"/>',
 aclasses:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/>',
 anews:'<path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7.5 9h6M7.5 12.5h6M7.5 16h4"/>'};
-const TABS={client:['home','schedule','log','info'],admin:['clients','aclasses','anews']};
+// owner: hidden role (5 taps on the logo + PIN). Starts with the admin tabs; owner-only tabs get added here.
+const TABS={client:['home','schedule','log','info'],admin:['clients','aclasses','anews'],owner:['clients','aclasses','anews']};
+const OWNER_PIN='1234'; // demo only; the real app authenticates the owner on the server
 
 function renderChrome(){
   document.documentElement.lang=S.lang;
@@ -277,7 +282,7 @@ function renderChrome(){
   document.getElementById('demoTxt').textContent=t('demo');
   document.getElementById('resetBtn').textContent=ui.armed==='reset'?t('resetAsk'):t('reset');
   document.querySelectorAll('#langSeg button').forEach(b=>b.classList.toggle('on',b.dataset.lang===S.lang));
-  document.querySelectorAll('#roleSeg button').forEach(b=>{b.textContent=t(b.dataset.role);b.classList.toggle('on',b.dataset.role===S.role)});
+  document.querySelectorAll('#roleSeg button').forEach(b=>{b.textContent=t(b.dataset.role);b.classList.toggle('on',b.dataset.role===S.role);if(b.dataset.role==='owner')b.hidden=S.role!=='owner';});
   if(!TABS[S.role].includes(ui.tab))ui.tab=TABS[S.role][0];
   document.getElementById('tabs').innerHTML=TABS[S.role].map(k=>`<button data-tab="${k}" class="${k===ui.tab?'on':''}"><svg viewBox="0 0 24 24">${ICON[k]}</svg>${t(k)}</button>`).join('');
 }
@@ -472,10 +477,31 @@ function closeScanner(){
 function syncRows(){ui.rows.forEach((r,i)=>{['ex','sets','reps','w'].forEach(f=>{const el=document.getElementById('r'+i+f);if(el)r[f]=el.value;});});}
 const val=id=>(document.getElementById(id)?.value||'').trim();
 
+const taps={n:0,t:0};
+function openPin(){
+  document.getElementById('pinTitle').textContent=t('pinTitle');
+  document.getElementById('pinMsg').textContent=t('pinHint');
+  document.getElementById('pinCancel').textContent=t('close');
+  document.getElementById('pinOk').textContent=t('enter');
+  const i=document.getElementById('pinIn');i.value='';
+  document.getElementById('pinOv').hidden=false;setTimeout(()=>i.focus(),50);
+}
+function submitPin(){
+  const i=document.getElementById('pinIn');
+  if(i.value.trim()!==OWNER_PIN){document.getElementById('pinMsg').textContent=t('pinWrong');i.value='';i.focus();return;}
+  document.getElementById('pinOv').hidden=true;
+  S.role='owner';ui.tab=null;save();render();window.scrollTo(0,0);toast(t('ownerIn'));
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='pinIn')submitPin();});
 document.addEventListener('click',e=>{
+  if(e.target.closest('#brand')){
+    const now=Date.now();taps.n=now-taps.t<800?taps.n+1:1;taps.t=now;
+    if(taps.n>=5){taps.n=0;if(S.role!=='owner')openPin();}
+    return;
+  }
   const b=e.target.closest('button');if(!b||b.disabled)return;
   if(b.dataset.lang){S.lang=b.dataset.lang;save();render();return;}
-  if(b.dataset.role){S.role=b.dataset.role;ui.tab=null;save();render();window.scrollTo(0,0);return;}
+  if(b.dataset.role){if(b.dataset.role===S.role)return;S.role=b.dataset.role;ui.tab=null;save();render();window.scrollTo(0,0);return;}
   if(b.dataset.tab){ui.tab=b.dataset.tab;ui.armed=null;render();window.scrollTo(0,0);return;}
   const a=b.dataset.a;if(!a)return;
   const armed=ui.armed;ui.armed=null;
@@ -495,6 +521,8 @@ document.addEventListener('click',e=>{
   case'copy': try{navigator.clipboard.writeText(b.dataset.v).then(()=>toast(t('copied')),()=>{});}catch(err){} return;
   case'bigqr':{const c=client(S.me);document.getElementById('qrBig').innerHTML=qrSvg(qrText(c));document.getElementById('qrNo').textContent='№ '+String(c.no).padStart(4,'0');document.getElementById('qrClose').textContent=t('close');document.getElementById('qrOv').hidden=false;return;}
   case'closeqr': document.getElementById('qrOv').hidden=true;return;
+  case'closepin': document.getElementById('pinOv').hidden=true;return;
+  case'pinok': submitPin();return;
   case'scan': openScanner();return;
   case'closescan': closeScanner();return;
   case'mancheck': if(!checkin(val('manNo')))return;break;
