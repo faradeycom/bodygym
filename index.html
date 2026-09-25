@@ -159,6 +159,20 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .pr b{font-family:var(--display);font-weight:700;font-size:26px;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .pnote{font-size:13px;color:var(--muted);margin-top:6px}
 
+/* find us */
+.find{display:grid;grid-template-columns:1fr 1.3fr;gap:24px;align-items:stretch}
+.findinfo{display:flex;flex-direction:column;gap:18px}
+.faddr{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.1;user-select:all}
+.small{font-size:13px}
+.mapbox{border:1px solid var(--line);border-radius:12px;overflow:hidden;min-height:300px;background:var(--surface2);display:flex}
+.mapbox iframe{border:0;width:100%;min-height:300px;flex:1}
+.mapfallback{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-decoration:none;color:var(--ink);padding:24px;text-align:center;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:32px 32px}
+.mapfallback svg{width:44px;height:44px;fill:var(--accent);stroke:var(--surface);stroke-width:1.5}
+.mapfallback b{font-family:var(--display);font-size:24px}
+.mapfallback span{font-size:13px;color:var(--muted);background:var(--surface2);padding:0 6px;border-radius:4px}
+.mapfallback span:last-child{color:var(--accent);font-weight:600}
+
 /* hours & contacts */
 .hc{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .hours{width:100%;border-collapse:collapse}
@@ -178,7 +192,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
   .hero{grid-template-columns:1fr}
   .amen{grid-template-columns:1fr 1fr}
   .prices{grid-template-columns:1fr}
-  .cols,.hc{grid-template-columns:1fr}
+  .cols,.hc,.find{grid-template-columns:1fr}
 }
 @media (max-width:620px){
   nav.links{display:none}
@@ -197,7 +211,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
 <header class="top"><div class="wrap">
   <a class="brand" href="#top">ЗАЛ</a>
   <nav class="links" id="nav"></nav>
-  <a class="btn primary sm appbtn" id="appBtn" ></a>
+  <a class="btn primary sm appbtn" id="appBtn"></a>
   <div class="seg" id="langSeg"><button data-lang="uk">UA</button><button data-lang="ru">RU</button></div>
 </div></header>
 
@@ -210,6 +224,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
   <section id="team"><div class="wrap" id="teamIn"></div></section>
   <section id="prices"><div class="wrap" id="priceIn"></div></section>
   <section id="contacts"><div class="wrap" id="contIn"></div></section>
+  <section id="find"><div class="wrap" id="findIn"></div></section>
 </main>
 <footer><div class="wrap" id="foot"></div></footer>
 <div class="toast" id="toast" hidden></div>
@@ -220,7 +235,10 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
 const C={
   name:'ЗАЛ',
   phone:'+380 00 000 00 00',
-  addr:{uk:'вул. Прикладна, 1',ru:'ул. Примерная, 1'},
+  addr:{uk:'м. Кривий Ріг, вул. Павла Глазового, 15',ru:'г. Кривой Рог, ул. Павла Глазового, 15'},
+  // місце на Google Картах (bodygym_kr); placeId веде навігатор саме до залу
+  map:{name:'bodygym_kr',q:'вулиця Павла Глазового, 15, Кривий Ріг',placeId:'ChIJ4aCFR_oh20ARs7ieFnvZkIw',lat:47.9348533,lng:33.4138465},
+  mapEmbedHosts:['github.io'], // на цих доменах показуємо вбудовану карту; в artifact iframe заборонені
   appUrl:'app/',
   // години: індекс 0 = понеділок
   hours:[['07:00','22:00'],['07:00','22:00'],['07:00','22:00'],['07:00','22:00'],['07:00','22:00'],['09:00','20:00'],['09:00','20:00']],
@@ -293,7 +311,8 @@ const C={
 /* ===== Тексти інтерфейсу ===== */
 const T={
 uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Дані на сторінці приклад. Замініть ціни, розклад, тренерів і контакти на реальні.',
- nav:{about:'Про зал',equipment:'Обладнання',classes:'Заняття',team:'Команда',prices:'Ціни',contacts:'Контакти'},
+ nav:{about:'Про зал',equipment:'Обладнання',classes:'Заняття',team:'Команда',prices:'Ціни',contacts:'Контакти',find:'Як нас знайти'},
+ fEy:'Як нас знайти',fH:'Кривий Ріг, Павла Глазового, 15',fP:'Натисніть «Прокласти маршрут», і Google Карти поведуть вас прямо до входу в зал.',route:'Прокласти маршрут',openMap:'Відкрити в Google Картах',routeHint:'На телефоні відкриється застосунок Google Карти з маршрутом від вашого місця.',
  heroEy:'Тренажерний зал поруч з домом',heroH:'Зал без черги <em>до тренажерів</em>',heroP:'Невеликий зал з фірмовим обладнанням. Силова зона, пілатес, фітнес і воркаут для дорослих, окремі групи для дітей і підлітків. Тепло взимку, душ і роздягальні.',
  toPrices:'Ціни',toTrial:'Пробне заняття',openNow:'Зараз відчинено, до',closedNow:'Зараз зачинено. Відкриємося о',m2:'м² площі',eq:'тренажерів і станцій',tr:'тренерів',shower:'душові кабіни',
  aboutEy:'Про зал',aboutH:'Площа і зручності',aboutP:'Розподіл площі по зонах, м².',total:'загальна площа',
@@ -306,7 +325,8 @@ uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Дані на сторінці при
  appBtn:'Відкрити застосунок',appBtnS:'Застосунок',
  wd:['Понеділок','Вівторок','Середа','Четвер','Пʼятниця','Субота','Неділя'],today:'сьогодні',foot:'Тренажерний зал'},
 ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Данные на странице пример. Замените цены, расписание, тренеров и контакты на реальные.',
- nav:{about:'О зале',equipment:'Оборудование',classes:'Занятия',team:'Команда',prices:'Цены',contacts:'Контакты'},
+ nav:{about:'О зале',equipment:'Оборудование',classes:'Занятия',team:'Команда',prices:'Цены',contacts:'Контакты',find:'Как нас найти'},
+ fEy:'Как нас найти',fH:'Кривой Рог, Павла Глазового, 15',fP:'Нажмите «Проложить маршрут», и Google Карты приведут вас прямо ко входу в зал.',route:'Проложить маршрут',openMap:'Открыть в Google Картах',routeHint:'На телефоне откроется приложение Google Карты с маршрутом от вашего места.',
  heroEy:'Тренажёрный зал рядом с домом',heroH:'Зал без очереди <em>к тренажёрам</em>',heroP:'Небольшой зал с фирменным оборудованием. Силовая зона, пилатес, фитнес и воркаут для взрослых, отдельные группы для детей и подростков. Тепло зимой, душ и раздевалки.',
  toPrices:'Цены',toTrial:'Пробное занятие',openNow:'Сейчас открыто, до',closedNow:'Сейчас закрыто. Откроемся в',m2:'м² площади',eq:'тренажёров и станций',tr:'тренеров',shower:'душевые кабины',
  aboutEy:'О зале',aboutH:'Площадь и удобства',aboutP:'Распределение площади по зонам, м².',total:'общая площадь',
@@ -401,8 +421,27 @@ function render(){
   document.getElementById('contIn').innerHTML=head(l.cEy,l.cH,'')+`
    <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}</td><td>${h[0]}–${h[1]}</td></tr>`).join('')}</tbody></table></div>
    <div class="contact">
-    <div><div class="lbl">${l.phone}</div><div class="cline"><span class="v num" id="phoneV">${esc(C.phone)}</span><button class="btn sm" id="copyBtn">${l.copy}</button></div></div>
-    <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span></div></div>   </div></div>`;
+    <div><div class="lbl">${l.phone}</div><div class="cline"><span class="v num" id="phoneV">${esc(C.phone)}</span><button class="btn sm" data-copy="phoneV">${l.copy}</button></div></div>
+    <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span><a class="btn sm" href="#find">${l.nav.find}</a></div></div>
+   </div></div>`;
+
+  const m=C.map,q=encodeURIComponent,pid=q(m.placeId);
+  const dirUrl=`https://www.google.com/maps/dir/?api=1&destination=${q(m.name)}&destination_place_id=${pid}`;
+  const openUrl=`https://www.google.com/maps/search/?api=1&query=${q(m.name)}&query_place_id=${pid}`;
+  const embed=C.mapEmbedHosts.some(h=>location.hostname.endsWith(h));
+  const coords=`${m.lat.toFixed(5)}° N, ${m.lng.toFixed(5)}° E`;
+  document.getElementById('findIn').innerHTML=head(l.fEy,l.fH,l.fP)+`
+   <div class="find">
+    <div class="findinfo">
+     <div><div class="lbl">${l.addr}</div><div class="faddr" id="addrV">${esc(tr(C.addr))}</div>
+      <div class="muted small num" style="margin-top:4px">${esc(m.name)} · ${coords}</div></div>
+     <div class="cta"><a class="btn primary" href="${dirUrl}" target="_blank" rel="noopener">${l.route}</a><a class="btn" href="${openUrl}" target="_blank" rel="noopener">${l.openMap}</a><button class="btn" data-copy="addrV">${l.copy}</button></div>
+     <p class="muted small">${l.routeHint}</p>
+    </div>
+    <div class="mapbox">${embed
+      ?`<iframe title="${esc(m.name)}" src="https://maps.google.com/maps?q=${q(m.name+', '+m.q)}&z=17&hl=${lang}&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`
+      :`<a class="mapfallback" href="${openUrl}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><b>${esc(m.name)}</b><span class="num">${coords}</span><span>${l.openMap} →</span></a>`}</div>
+   </div>`;
 
   document.getElementById('foot').textContent=`${C.name} · ${l.foot} · ${tr(C.addr)}`;
 }
@@ -411,9 +450,10 @@ function toast(m){const el=document.getElementById('toast');el.textContent=m;el.
 document.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.lang){lang=b.dataset.lang;try{localStorage.setItem('zal-landing-lang',lang);}catch(err){}render();return;}
-  if(b.id==='copyBtn'){
-    const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('phoneV'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast(L().copyFail);};
-    try{navigator.clipboard.writeText(C.phone).then(()=>toast(L().copied),sel);}catch(err){sel();}
+  if(b.dataset.copy){
+    const el=document.getElementById(b.dataset.copy);
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast(L().copyFail);};
+    try{navigator.clipboard.writeText(el.textContent.trim()).then(()=>toast(L().copied),sel);}catch(err){sel();}
   }
 });
 render();
