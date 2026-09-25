@@ -1,0 +1,451 @@
+<!doctype html><html><head><meta charset=utf8><meta name="robots" content="noindex"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Застосунок Зал</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E6EAE9; --surface:#FFFFFF; --surface2:#F2F4F4; --ink:#14181B; --muted:#5A646A; --line:#D1D7D6;
+  --accent:#1D53D1; --accent-ink:#FFFFFF; --accent-soft:#E3EAFB;
+  --ok:#23864F; --ok-soft:#E1F2E8; --warn:#B87A00; --warn-soft:#FBF0D6; --bad:#C4342A; --bad-soft:#FBE3E0;
+  --plate:#14181B;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0D1013; --surface:#161A1E; --surface2:#1D2227; --ink:#E7EBED; --muted:#96A0A6; --line:#2A3137;
+    --accent:#6A93FF; --accent-ink:#0A0F1C; --accent-soft:#1A2440;
+    --ok:#4CC282; --ok-soft:#15291E; --warn:#E3AE3A; --warn-soft:#2D2413; --bad:#F06A5E; --bad-soft:#321A18;
+    --plate:#E7EBED;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0D1013; --surface:#161A1E; --surface2:#1D2227; --ink:#E7EBED; --muted:#96A0A6; --line:#2A3137;
+  --accent:#6A93FF; --accent-ink:#0A0F1C; --accent-soft:#1A2440;
+  --ok:#4CC282; --ok-soft:#15291E; --warn:#E3AE3A; --warn-soft:#2D2413; --bad:#F06A5E; --bad-soft:#321A18;
+  --plate:#E7EBED;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+.app{max-width:520px;margin:0 auto;padding-inline:16px;padding-block:0 96px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:10px;padding-block:12px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.brand{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:.04em;line-height:1}
+.brand small{display:block;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.spacer{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--muted);font:600 12px var(--body);padding:6px 9px;cursor:pointer;letter-spacing:.04em}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.demo{font-size:12px;color:var(--muted);background:var(--surface2);border:1px dashed var(--line);border-radius:8px;padding:8px 10px;margin-bottom:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.demo button{margin-left:auto}
+h2{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.02em;margin:0;text-wrap:balance}
+h3{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0}
+.stack{display:flex;flex-direction:column;gap:16px}
+.sec{display:flex;flex-direction:column;gap:10px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.row{display:flex;align-items:center;gap:10px}
+.wrap{flex-wrap:wrap}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.num{font-variant-numeric:tabular-nums}
+.btn{font:600 14px var(--body);border-radius:8px;padding:9px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pill{display:inline-block;font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.acc{background:var(--accent-soft);color:var(--accent)}
+input,select,textarea{font:15px var(--body);color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
+textarea{min-height:80px;resize:vertical}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.03em;flex:1;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* membership card */
+.card{background:var(--ink);color:var(--bg);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.card .plan{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.card .big{font-family:var(--display);font-weight:800;font-size:64px;line-height:.9;font-variant-numeric:tabular-nums}
+.card .big span{font-size:24px;opacity:.6;font-weight:600}
+.plates{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.plates i{display:block;width:14px;height:34px;border-radius:3px;background:var(--bg);opacity:.95}
+.plates i.used{opacity:.18}
+.plates i:nth-child(odd){height:40px}
+.card .meta{display:flex;justify-content:space-between;gap:10px;font-size:13px;flex-wrap:wrap}
+.card .meta b{font-weight:600}
+.code{display:flex;align-items:center;gap:14px}
+.bars{display:flex;height:44px;gap:2px;align-items:stretch;flex:none}
+.bars i{display:block;background:var(--ink)}
+.memno{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:.06em}
+
+/* list items */
+.item{display:flex;gap:12px;align-items:center;padding-block:10px;border-top:1px solid var(--line)}
+.item:first-child{border-top:0;padding-top:0}
+.item:last-child{padding-bottom:0}
+.item .t{font-family:var(--display);font-weight:700;font-size:22px;min-width:58px;font-variant-numeric:tabular-nums}
+.item .body{flex:1;min-width:0}
+.item .body b{display:block;font-weight:600}
+.pips{display:flex;gap:3px;margin-top:5px;flex-wrap:wrap}
+.pips i{width:8px;height:8px;border-radius:2px;background:var(--accent)}
+.pips i.free{background:var(--line)}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.days button{flex:none;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:52px;padding:8px 6px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);cursor:pointer;font:500 12px var(--body)}
+.days button b{font-family:var(--display);font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.days button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.news b{display:block;font-weight:600}
+.news p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 8px}
+.stat b{display:block;font-family:var(--display);font-size:28px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.chart svg{width:100%;height:auto;display:block}
+.chart .axis{fill:var(--muted);font:11px var(--body)}
+.chart .gl{stroke:var(--line)}
+.chart .ln{stroke:var(--accent);fill:none;stroke-width:2.5}
+.chart .ar{fill:var(--accent);opacity:.12}
+.chart .dt{fill:var(--accent)}
+.chart .lbl{fill:var(--ink);font:600 12px var(--body)}
+table.tbl{width:100%;border-collapse:collapse}
+.tbl td{padding:8px 0;border-top:1px solid var(--line)}
+.tbl tr:first-child td{border-top:0}
+.tbl td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.exrow{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:6px;align-items:end}
+.xbtn{border:0;background:transparent;color:var(--muted);font-size:20px;cursor:pointer;padding:6px}
+.w-sets{font-size:13px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips label{display:flex;align-items:center;gap:4px;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:var(--surface2)}
+.chips input{width:auto}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .in{max-width:520px;margin:0 auto;display:flex}
+nav.tabs button{flex:1;border:0;background:transparent;color:var(--muted);padding:10px 4px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font:600 11px var(--body);letter-spacing:.04em}
+nav.tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button.on{color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;z-index:9;max-width:90vw}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+.sell{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.sell select{flex:1;min-width:140px}
+@media (max-width:440px){.brand small{display:none}.seg button{padding:6px 7px;font-size:11px}header.top{gap:6px}}
+@media (max-width:400px){.stats{grid-template-columns:repeat(2,1fr)}.exrow{grid-template-columns:1fr 1fr 1fr auto}.exrow .exn{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">ЗАЛ<small id="sub"></small></div>
+    <div class="spacer"></div>
+    <div class="seg" id="langSeg"><button data-lang="uk">UA</button><button data-lang="ru">RU</button></div>
+    <div class="seg" id="roleSeg"><button data-role="client"></button><button data-role="admin"></button></div>
+  </header>
+  <div class="demo"><span id="demoTxt"></span><button class="btn sm ghost" data-a="reset" id="resetBtn"></button></div>
+  <main id="view" class="stack"></main>
+</div>
+<nav class="tabs"><div class="in" id="tabs"></div></nav>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+const LS='zal-app-v1';
+const T={
+uk:{sub:'клієнтський застосунок',client:'Клієнт',admin:'Адмін',demo:'Демо-режим: дані прикладу, зберігаються лише на цьому пристрої.',reset:'Скинути демо',resetAsk:'Точно скинути?',resetDone:'Демо-дані відновлено',
+home:'Головна',schedule:'Розклад',log:'Тренування',info:'Про зал',clients:'Клієнти',aclasses:'Заняття',anews:'Новини',
+hello:'Привіт',membership:'Абонемент',left:'занять залишилось',unlimited:'Безліміт',until:'Діє до',daysLeft:'дн. залишилось',expired:'Закінчився',active:'Активний',low:'Закінчується',
+memno:'Номер клієнта',showDesk:'Покажіть номер на рецепції при вході',myBook:'Мої записи',noBook:'Ви ще нікуди не записані.',toSchedule:'Відкрити розклад',news:'Новини залу',visits:'Останні візити',noVisits:'Візитів ще не було.',
+book:'Записатися',cancel:'Скасувати',booked:'Ви записані',full:'Місць немає',spots:'вільно',of:'з',min:'хв',noClasses:'Цього дня занять немає.',needPlan:'Щоб записатися, продовжте абонемент на рецепції.',bookedT:'Ви записані',cancelT:'Запис скасовано',
+progress:'Прогрес',bestW:'Найкраща вага',addW:'Нове тренування',ex:'Вправа',sets:'Підх.',reps:'Повт.',kg:'кг',addEx:'+ вправа',save:'Зберегти',savedW:'Тренування збережено',history:'Історія',noW:'Записів ще немає.',noData:'Для графіка потрібно хоча б 2 тренування з цією вправою.',
+hours:'Години роботи',hoursV:[['Пн–Пт','7:00–22:00'],['Сб–Нд','9:00–20:00']],prices:'Ціни',equip:'Обладнання',equipT:'Усі тренажери фірмові, від перевірених виробників. Ми регулярно їх обслуговуємо, тож усе справне й безпечне.',contacts:'Контакти',addr:'Адреса',phone:'Телефон',copy:'Копіювати',copied:'Скопійовано',example:'приклад, замініть на свої дані',
+search:'Пошук за ім’ям або телефоном',statActive:'активні',statLow:'закінчуються',statExp:'прострочені',statToday:'візитів сьогодні',visit:'Візит',visitT:'Візит відмічено',already:'Вже відмічено сьогодні',sell:'Продати',sellT:'Абонемент оформлено',newClient:'Новий клієнт',name:'Ім’я',add:'Додати',addedC:'Клієнта додано',noLeft:'Немає занять',
+bookedList:'Записані',nobody:'Поки ніхто.',newClass:'Нове заняття',title:'Назва',time:'Час',dur:'Тривалість, хв',trainer:'Тренер',cap:'Місць',days:'Дні',addedK:'Заняття додано',del:'Видалити',confirm:'Підтвердити?',deleted:'Видалено',
+newNews:'Нова новина',text:'Текст',publish:'Опублікувати',published:'Опубліковано',fillAll:'Заповніть усі поля',
+wd:['Пн','Вт','Ср','Чт','Пт','Сб','Нд'],today:'Сьогодні',loc:'uk-UA',cur:'₴'},
+ru:{sub:'приложение для клиентов',client:'Клиент',admin:'Админ',demo:'Демо-режим: данные примера, хранятся только на этом устройстве.',reset:'Сбросить демо',resetAsk:'Точно сбросить?',resetDone:'Демо-данные восстановлены',
+home:'Главная',schedule:'Расписание',log:'Тренировки',info:'О зале',clients:'Клиенты',aclasses:'Занятия',anews:'Новости',
+hello:'Привет',membership:'Абонемент',left:'занятий осталось',unlimited:'Безлимит',until:'Действует до',daysLeft:'дн. осталось',expired:'Закончился',active:'Активен',low:'Заканчивается',
+memno:'Номер клиента',showDesk:'Покажите номер на ресепшене при входе',myBook:'Мои записи',noBook:'Вы пока никуда не записаны.',toSchedule:'Открыть расписание',news:'Новости зала',visits:'Последние визиты',noVisits:'Визитов ещё не было.',
+book:'Записаться',cancel:'Отменить',booked:'Вы записаны',full:'Мест нет',spots:'свободно',of:'из',min:'мин',noClasses:'В этот день занятий нет.',needPlan:'Чтобы записаться, продлите абонемент на ресепшене.',bookedT:'Вы записаны',cancelT:'Запись отменена',
+progress:'Прогресс',bestW:'Лучший вес',addW:'Новая тренировка',ex:'Упражнение',sets:'Подх.',reps:'Повт.',kg:'кг',addEx:'+ упражнение',save:'Сохранить',savedW:'Тренировка сохранена',history:'История',noW:'Записей пока нет.',noData:'Для графика нужно хотя бы 2 тренировки с этим упражнением.',
+hours:'Часы работы',hoursV:[['Пн–Пт','7:00–22:00'],['Сб–Вс','9:00–20:00']],prices:'Цены',equip:'Оборудование',equipT:'Все тренажёры фирменные, от проверенных производителей. Мы регулярно их обслуживаем, поэтому всё исправно и безопасно.',contacts:'Контакты',addr:'Адрес',phone:'Телефон',copy:'Копировать',copied:'Скопировано',example:'пример, замените на свои данные',
+search:'Поиск по имени или телефону',statActive:'активные',statLow:'заканчиваются',statExp:'просрочены',statToday:'визитов сегодня',visit:'Визит',visitT:'Визит отмечен',already:'Уже отмечен сегодня',sell:'Продать',sellT:'Абонемент оформлен',newClient:'Новый клиент',name:'Имя',add:'Добавить',addedC:'Клиент добавлен',noLeft:'Нет занятий',
+bookedList:'Записаны',nobody:'Пока никто.',newClass:'Новое занятие',title:'Название',time:'Время',dur:'Длительность, мин',trainer:'Тренер',cap:'Мест',days:'Дни',addedK:'Занятие добавлено',del:'Удалить',confirm:'Подтвердить?',deleted:'Удалено',
+newNews:'Новая новость',text:'Текст',publish:'Опубликовать',published:'Опубликовано',fillAll:'Заполните все поля',
+wd:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],today:'Сегодня',loc:'ru-UA',cur:'₴'}
+};
+const EX={squat:{uk:'Присідання',ru:'Приседания'},bench:{uk:'Жим лежачи',ru:'Жим лёжа'},dead:{uk:'Станова тяга',ru:'Становая тяга'},row:{uk:'Тяга в нахилі',ru:'Тяга в наклоне'},press:{uk:'Жим стоячи',ru:'Жим стоя'},legpress:{uk:'Жим ногами',ru:'Жим ногами'},pull:{uk:'Підтягування',ru:'Подтягивания'}};
+
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+const TD=iso(TODAY);
+const dow=d=>(d.getDay()+6)%7;
+const diffDays=(a,b)=>Math.round((parse(a)-parse(b))/864e5);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,9);
+
+function seed(){
+  const d=n=>iso(addDays(TODAY,n));
+  const s={lang:'uk',role:'client',me:'c1',
+  plans:[{id:'p1',name:{uk:'Разове відвідування',ru:'Разовое посещение'},price:150,visits:1,days:1},
+         {id:'p8',name:{uk:'8 занять / місяць',ru:'8 занятий / месяц'},price:900,visits:8,days:30},
+         {id:'p12',name:{uk:'12 занять / місяць',ru:'12 занятий / месяц'},price:1200,visits:12,days:30},
+         {id:'pU',name:{uk:'Безліміт / місяць',ru:'Безлимит / месяц'},price:1500,visits:null,days:30}],
+  clients:[
+    {id:'c1',no:147,name:'Олег Коваль',phone:'+380 67 000 11 47',plan:'p12',left:7,until:d(18),visits:[d(-1),d(-3),d(-6),d(-8),d(-10)]},
+    {id:'c2',no:112,name:'Ірина Мельник',phone:'+380 50 000 21 12',plan:'pU',left:null,until:d(25),visits:[d(0),d(-2)]},
+    {id:'c3',no:98,name:'Андрій Бондар',phone:'+380 63 000 09 98',plan:'p8',left:1,until:d(4),visits:[d(-2),d(-5)]},
+    {id:'c4',no:61,name:'Марина Ткач',phone:'+380 97 000 06 61',plan:'p8',left:0,until:d(-3),visits:[d(-4)]},
+    {id:'c5',no:153,name:'Дмитро Савчук',phone:'+380 66 000 15 53',plan:'p12',left:10,until:d(27),visits:[d(0),d(-1)]},
+    {id:'c6',no:131,name:'Світлана Гнатюк',phone:'+380 68 000 13 31',plan:'p8',left:5,until:d(12),visits:[d(-3)]}],
+  classes:[
+    {id:'k1',days:[0,2,4],time:'07:30',dur:50,title:{uk:'Функціональний тренінг',ru:'Функциональный тренинг'},trainer:'Сергій',cap:10},
+    {id:'k2',days:[1,3],time:'18:30',dur:60,title:{uk:'Кросфіт-комплекс',ru:'Кроссфит-комплекс'},trainer:'Сергій',cap:8},
+    {id:'k3',days:[0,2],time:'19:00',dur:60,title:{uk:'Техніка базових вправ',ru:'Техника базовых упражнений'},trainer:'Віктор',cap:6},
+    {id:'k4',days:[5],time:'10:00',dur:45,title:{uk:'Стретчинг',ru:'Стретчинг'},trainer:'Олена',cap:12},
+    {id:'k5',days:[1,3,5],time:'12:00',dur:60,title:{uk:'Жіноча група',ru:'Женская группа'},trainer:'Олена',cap:8}],
+  bookings:{},
+  news:[
+    {id:'n1',date:d(-1),title:{uk:'Новий тренажер: жим ногами 45°',ru:'Новый тренажёр: жим ногами 45°'},text:{uk:'Вже стоїть біля силових рам, навантаження до 400 кг.',ru:'Уже стоит у силовых рам, нагрузка до 400 кг.'}},
+    {id:'n2',date:d(-6),title:{uk:'Акція: приведи друга',ru:'Акция: приведи друга'},text:{uk:'Друг отримує перше заняття безкоштовно, а ви +2 заняття до абонемента.',ru:'Друг получает первое занятие бесплатно, а вы +2 занятия к абонементу.'}},
+    {id:'n3',date:d(-12),title:{uk:'Оновили душові',ru:'Обновили душевые'},text:{uk:'Нові змішувачі й лавки в роздягальнях.',ru:'Новые смесители и скамейки в раздевалках.'}}],
+  workouts:[
+    {id:'w1',client:'c1',date:d(-17),items:[{ex:'squat',sets:5,reps:5,w:80},{ex:'bench',sets:5,reps:5,w:60}]},
+    {id:'w2',client:'c1',date:d(-13),items:[{ex:'squat',sets:5,reps:5,w:85},{ex:'row',sets:4,reps:8,w:50}]},
+    {id:'w3',client:'c1',date:d(-10),items:[{ex:'squat',sets:5,reps:5,w:87.5},{ex:'bench',sets:5,reps:5,w:62.5}]},
+    {id:'w4',client:'c1',date:d(-6),items:[{ex:'squat',sets:5,reps:5,w:90},{ex:'dead',sets:3,reps:5,w:110}]},
+    {id:'w5',client:'c1',date:d(-3),items:[{ex:'squat',sets:5,reps:5,w:92.5},{ex:'bench',sets:5,reps:5,w:65}]},
+    {id:'w6',client:'c1',date:d(-1),items:[{ex:'squat',sets:5,reps:5,w:95},{ex:'press',sets:4,reps:6,w:40}]}]
+  };
+  const others=['c2','c3','c5','c6','c4'];
+  for(let i=0;i<7;i++){const day=addDays(TODAY,i),k=iso(day);
+    s.classes.forEach((c,ci)=>{if(!c.days.includes(dow(day)))return;
+      let n=(i*3+ci*2)%5; if(c.id==='k3'&&i<3) n=c.cap;
+      const arr=[];for(let j=0;j<n;j++)arr.push(j<others.length?others[j]:'x'+j);
+      s.bookings[c.id+'|'+k]=arr;});}
+  // client c1 has one upcoming booking
+  for(let i=1;i<7;i++){const day=addDays(TODAY,i);if([1,3].includes(dow(day))){(s.bookings['k2|'+iso(day)]||(s.bookings['k2|'+iso(day)]=[])).push('c1');break;}}
+  return s;
+}
+let S;
+try{S=JSON.parse(localStorage.getItem(LS));}catch(e){}
+if(!S||!S.clients)S=seed();
+const ui={tab:null,day:TD,aday:TD,exSel:'squat',rows:[{ex:'squat',sets:5,reps:5,w:''}],q:'',armed:null};
+function save(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
+const t=k=>T[S.lang][k];
+const tr=x=>x==null?'':typeof x==='string'?x:(x[S.lang]||x.uk);
+const fmt=s=>parse(s).toLocaleDateString(t('loc'),{day:'numeric',month:'short'});
+const fmtW=s=>parse(s).toLocaleDateString(t('loc'),{weekday:'short',day:'numeric',month:'short'});
+const plan=id=>S.plans.find(p=>p.id===id);
+const client=id=>S.clients.find(c=>c.id===id);
+function status(c){const dl=diffDays(c.until,TD);
+  if(dl<0||(c.left!=null&&c.left<=0))return'bad';
+  if(dl<=5||(c.left!=null&&c.left<=2))return'warn';return'ok';}
+const stLabel=s=>({ok:t('active'),warn:t('low'),bad:t('expired')})[s];
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2000);}
+const bk=(k,d)=>S.bookings[k+'|'+d]||[];
+
+const ICON={
+home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+schedule:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+log:'<path d="M2 12h3M19 12h3M5 8v8M19 8v8M8 6v12M16 6v12M8 12h8"/>',
+info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+clients:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5c2 .6 3.2 2.5 3.6 5.5"/>',
+aclasses:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/>',
+anews:'<path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M7.5 9h6M7.5 12.5h6M7.5 16h4"/>'};
+const TABS={client:['home','schedule','log','info'],admin:['clients','aclasses','anews']};
+
+function renderChrome(){
+  document.documentElement.lang=S.lang;
+  document.getElementById('sub').textContent=t('sub');
+  document.getElementById('demoTxt').textContent=t('demo');
+  document.getElementById('resetBtn').textContent=ui.armed==='reset'?t('resetAsk'):t('reset');
+  document.querySelectorAll('#langSeg button').forEach(b=>b.classList.toggle('on',b.dataset.lang===S.lang));
+  document.querySelectorAll('#roleSeg button').forEach(b=>{b.textContent=t(b.dataset.role);b.classList.toggle('on',b.dataset.role===S.role)});
+  if(!TABS[S.role].includes(ui.tab))ui.tab=TABS[S.role][0];
+  document.getElementById('tabs').innerHTML=TABS[S.role].map(k=>`<button data-tab="${k}" class="${k===ui.tab?'on':''}"><svg viewBox="0 0 24 24">${ICON[k]}</svg>${t(k)}</button>`).join('');
+}
+function render(){renderChrome();document.getElementById('view').innerHTML=V[ui.tab]();after();}
+function after(){if(ui.tab==='clients')renderClientList();}
+
+function dayStrip(sel,act){let h='<div class="days">';
+  for(let i=0;i<7;i++){const d=addDays(TODAY,i),k=iso(d);
+    h+=`<button data-a="${act}" data-d="${k}" class="${k===sel?'on':''}">${i===0?t('today'):t('wd')[dow(d)]}<b>${d.getDate()}</b></button>`;}
+  return h+'</div>';}
+function classesOn(k){const d=parse(k);return S.classes.filter(c=>c.days.includes(dow(d))).sort((a,b)=>a.time.localeCompare(b.time));}
+function pips(n,cap){let h='<div class="pips">';for(let i=0;i<cap;i++)h+=`<i class="${i<n?'':'free'}"></i>`;return h+'</div>';}
+
+const V={
+home(){
+  const c=client(S.me),p=plan(c.plan),st=status(c),dl=diffDays(c.until,TD);
+  let plates='';
+  if(p.visits){for(let i=0;i<p.visits;i++)plates+=`<i class="${i<c.left?'':'used'}"></i>`;}
+  const big=p.visits?`${Math.max(c.left,0)}<span> / ${p.visits}</span>`:'∞';
+  let bars='';const seedN=String(c.no).padStart(4,'0')+'7310';
+  for(const ch of seedN){const n=+ch;bars+=`<i style="width:${1+n%3}px"></i><i style="width:${1+(n>>1)%2}px;background:transparent"></i>`;}
+  const mine=[];
+  for(let i=0;i<7;i++){const k=iso(addDays(TODAY,i));classesOn(k).forEach(cl=>{if(bk(cl.id,k).includes(c.id))mine.push({cl,k});});}
+  return `
+  <div class="sec"><h2>${t('hello')}, ${esc(c.name.split(' ')[0])}</h2></div>
+  <div class="card">
+    <div class="row"><div class="plan">${t('membership')} · ${esc(tr(p.name))}</div><div class="spacer"></div><span class="pill ${st}">${stLabel(st)}</span></div>
+    <div><div class="big">${big}</div><div class="small" style="opacity:.7">${p.visits?t('left'):t('unlimited')}</div></div>
+    ${plates?`<div class="plates" aria-hidden="true">${plates}</div>`:''}
+    <div class="meta"><span>${t('until')} <b>${fmt(c.until)}</b></span><span class="num">${dl>=0?dl+' '+t('daysLeft'):t('expired')}</span></div>
+  </div>
+  <div class="panel code"><div class="bars" aria-hidden="true">${bars}</div><div><div class="small muted">${t('memno')}</div><div class="memno num">№ ${String(c.no).padStart(4,'0')}</div><div class="small muted">${t('showDesk')}</div></div></div>
+  <div class="sec"><h3>${t('myBook')}</h3><div class="panel">${mine.length?mine.map(m=>`<div class="item"><div class="t">${m.cl.time}</div><div class="body"><b>${esc(tr(m.cl.title))}</b><span class="small muted">${fmtW(m.k)} · ${esc(m.cl.trainer)}</span></div><button class="btn sm ghost" data-a="unbook" data-k="${m.cl.id}" data-d="${m.k}">${t('cancel')}</button></div>`).join(''):`<div class="empty">${t('noBook')}</div><button class="btn sm" data-tab="schedule">${t('toSchedule')}</button>`}</div></div>
+  <div class="sec"><h3>${t('news')}</h3><div class="panel">${S.news.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3).map(n=>`<div class="item news"><div class="body"><span class="small muted">${fmt(n.date)}</span><b>${esc(tr(n.title))}</b><p>${esc(tr(n.text))}</p></div></div>`).join('')}</div></div>
+  <div class="sec"><h3>${t('visits')}</h3><div class="panel">${c.visits.length?`<div class="chips">${c.visits.slice(0,8).map(v=>`<span class="pill acc">${fmtW(v)}</span>`).join('')}</div>`:`<div class="empty">${t('noVisits')}</div>`}</div></div>`;
+},
+schedule(){
+  const c=client(S.me),can=status(c)!=='bad';
+  const list=classesOn(ui.day);
+  return `<div class="sec"><h2>${t('schedule')}</h2>${dayStrip(ui.day,'day')}</div>
+  ${can?'':`<div class="panel small" style="border-color:var(--bad);color:var(--bad)">${t('needPlan')}</div>`}
+  <div class="panel">${list.length?list.map(cl=>{const b=bk(cl.id,ui.day),mine=b.includes(c.id),free=cl.cap-b.length;
+    const btn=mine?`<button class="btn sm" data-a="unbook" data-k="${cl.id}" data-d="${ui.day}">${t('cancel')}</button>`:free<=0?`<button class="btn sm" disabled>${t('full')}</button>`:`<button class="btn sm primary" data-a="book" data-k="${cl.id}" data-d="${ui.day}" ${can?'':'disabled'}>${t('book')}</button>`;
+    return `<div class="item"><div class="t">${cl.time}</div><div class="body"><b>${esc(tr(cl.title))}</b><span class="small muted">${esc(cl.trainer)} · ${cl.dur} ${t('min')} · <span class="num">${t('spots')} ${Math.max(free,0)} ${t('of')} ${cl.cap}</span></span>${pips(b.length,cl.cap)}${mine?`<span class="pill ok" style="margin-top:6px">${t('booked')}</span>`:''}</div>${btn}</div>`;}).join(''):`<div class="empty">${t('noClasses')}</div>`}</div>`;
+},
+log(){
+  const ws=S.workouts.filter(w=>w.client===S.me).sort((a,b)=>b.date.localeCompare(a.date));
+  const exOpts=sel=>Object.keys(EX).map(k=>`<option value="${k}" ${k===sel?'selected':''}>${esc(tr(EX[k]))}</option>`).join('');
+  return `<div class="sec"><h2>${t('log')}</h2></div>
+  <div class="sec"><div class="row"><h3>${t('progress')}</h3><div class="spacer"></div><select id="exSel" style="width:auto" data-a="exsel">${exOpts(ui.exSel)}</select></div>
+  <div class="panel chart">${chart(ws)}</div></div>
+  <div class="sec"><h3>${t('addW')}</h3><div class="panel stack" style="gap:10px">
+    ${ui.rows.map((r,i)=>`<div class="exrow">
+      <label class="f exn">${i===0?t('ex'):''}<select id="r${i}ex" data-row="${i}" data-f="ex">${exOpts(r.ex)}</select></label>
+      <label class="f">${i===0?t('sets'):''}<input id="r${i}sets" type="number" inputmode="numeric" min="1" value="${esc(r.sets)}" data-row="${i}" data-f="sets"></label>
+      <label class="f">${i===0?t('reps'):''}<input id="r${i}reps" type="number" inputmode="numeric" min="1" value="${esc(r.reps)}" data-row="${i}" data-f="reps"></label>
+      <label class="f">${i===0?t('kg'):''}<input id="r${i}w" type="number" inputmode="decimal" step="0.5" min="0" value="${esc(r.w)}" data-row="${i}" data-f="w" placeholder="0"></label>
+      <button class="xbtn" data-a="rmrow" data-i="${i}" aria-label="×" ${ui.rows.length<2?'disabled':''}>×</button></div>`).join('')}
+    <div class="row"><button class="btn sm ghost" data-a="addrow">${t('addEx')}</button><div class="spacer"></div><button class="btn primary" data-a="savew">${t('save')}</button></div>
+  </div></div>
+  <div class="sec"><h3>${t('history')}</h3><div class="panel">${ws.length?ws.map(w=>`<div class="item"><div class="body"><b>${fmtW(w.date)}</b>${w.items.map(it=>`<div class="w-sets num">${esc(tr(EX[it.ex]))}: ${it.sets}×${it.reps} · ${it.w} ${t('kg')}</div>`).join('')}</div></div>`).join(''):`<div class="empty">${t('noW')}</div>`}</div></div>`;
+},
+info(){
+  return `<div class="sec"><h2>${t('info')}</h2><span class="small muted">${t('example')}</span></div>
+  <div class="sec"><h3>${t('hours')}</h3><div class="panel"><table class="tbl">${t('hoursV').map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table></div></div>
+  <div class="sec"><h3>${t('prices')}</h3><div class="panel"><table class="tbl">${S.plans.map(p=>`<tr><td>${esc(tr(p.name))}</td><td>${p.price} ${t('cur')}</td></tr>`).join('')}</table></div></div>
+  <div class="sec"><h3>${t('equip')}</h3><div class="panel">${t('equipT')}</div></div>
+  <div class="sec"><h3>${t('contacts')}</h3><div class="panel stack" style="gap:10px">
+    <div class="row"><div style="flex:1"><div class="small muted">${t('phone')}</div><div class="num" style="font-weight:600;user-select:all">+380 00 000 00 00</div></div><button class="btn sm" data-a="copy" data-v="+380 00 000 00 00">${t('copy')}</button></div>
+    <div><div class="small muted">${t('addr')}</div><div style="font-weight:600;user-select:all">вул. Прикладна, 1</div></div>
+  </div></div>`;
+},
+clients(){
+  const cs=S.clients;
+  const n={ok:0,warn:0,bad:0};cs.forEach(c=>n[status(c)]++);
+  const today=cs.filter(c=>c.visits.includes(TD)).length;
+  return `<div class="sec"><h2>${t('clients')}</h2></div>
+  <div class="stats"><div class="stat"><b style="color:var(--ok)">${n.ok}</b><span>${t('statActive')}</span></div><div class="stat"><b style="color:var(--warn)">${n.warn}</b><span>${t('statLow')}</span></div><div class="stat"><b style="color:var(--bad)">${n.bad}</b><span>${t('statExp')}</span></div><div class="stat"><b>${today}</b><span>${t('statToday')}</span></div></div>
+  <input id="q" type="search" placeholder="${t('search')}" value="${esc(ui.q)}">
+  <div class="panel" id="clist"></div>
+  <div class="sec"><h3>${t('newClient')}</h3><div class="panel stack" style="gap:10px">
+    <div class="grid2"><label class="f">${t('name')}<input id="ncName"></label><label class="f">${t('phone')}<input id="ncPhone" type="tel" inputmode="tel"></label></div>
+    <div class="row"><select id="ncPlan">${S.plans.map(p=>`<option value="${p.id}">${esc(tr(p.name))} · ${p.price} ${t('cur')}</option>`).join('')}</select><button class="btn primary" data-a="addclient">${t('add')}</button></div>
+  </div></div>`;
+},
+aclasses(){
+  const list=classesOn(ui.aday);
+  return `<div class="sec"><h2>${t('aclasses')}</h2>${dayStrip(ui.aday,'aday')}</div>
+  <div class="panel">${list.length?list.map(cl=>{const b=bk(cl.id,ui.aday);
+    const names=b.map(id=>client(id)?.name).filter(Boolean);const guests=b.length-names.length;
+    return `<div class="item"><div class="t">${cl.time}</div><div class="body"><b>${esc(tr(cl.title))}</b><span class="small muted">${esc(cl.trainer)} · ${cl.dur} ${t('min')} · <span class="num">${b.length}/${cl.cap}</span></span>${pips(b.length,cl.cap)}
+      <div class="small" style="margin-top:6px">${t('bookedList')}: ${names.length||guests?esc(names.join(', '))+(guests?(names.length?', ':'')+'+'+guests:''):`<span class="muted">${t('nobody')}</span>`}</div></div>
+      <button class="btn sm danger" data-a="delclass" data-k="${cl.id}">${ui.armed==='k'+cl.id?t('confirm'):t('del')}</button></div>`;}).join(''):`<div class="empty">${t('noClasses')}</div>`}</div>
+  <div class="sec"><h3>${t('newClass')}</h3><div class="panel stack" style="gap:10px">
+    <label class="f">${t('title')}<input id="kTitle"></label>
+    <div class="grid2"><label class="f">${t('trainer')}<input id="kTrainer"></label><label class="f">${t('time')}<input id="kTime" type="time" value="18:00"></label></div>
+    <div class="grid2"><label class="f">${t('dur')}<input id="kDur" type="number" value="60" min="15"></label><label class="f">${t('cap')}<input id="kCap" type="number" value="8" min="1"></label></div>
+    <div class="f" style="font-size:12px;color:var(--muted);font-weight:600">${t('days')}<div class="chips" style="margin-top:4px">${t('wd').map((w,i)=>`<label><input type="checkbox" id="kd${i}" value="${i}">${w}</label>`).join('')}</div></div>
+    <div class="row"><div class="spacer"></div><button class="btn primary" data-a="addclass">${t('add')}</button></div>
+  </div></div>`;
+},
+anews(){
+  return `<div class="sec"><h2>${t('anews')}</h2></div>
+  <div class="panel stack" style="gap:10px"><strong>${t('newNews')}</strong>
+    <label class="f">${t('title')}<input id="nTitle"></label><label class="f">${t('text')}<textarea id="nText"></textarea></label>
+    <div class="row"><div class="spacer"></div><button class="btn primary" data-a="addnews">${t('publish')}</button></div></div>
+  <div class="panel">${S.news.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(n=>`<div class="item news"><div class="body"><span class="small muted">${fmt(n.date)}</span><b>${esc(tr(n.title))}</b><p>${esc(tr(n.text))}</p></div><button class="btn sm danger" data-a="delnews" data-k="${n.id}">${ui.armed==='n'+n.id?t('confirm'):t('del')}</button></div>`).join('')}</div>`;
+}
+};
+
+function renderClientList(){
+  const q=ui.q.trim().toLowerCase();
+  const rank={bad:0,warn:1,ok:2};
+  const cs=S.clients.filter(c=>!q||c.name.toLowerCase().includes(q)||c.phone.replace(/\s/g,'').includes(q.replace(/\s/g,''))).sort((a,b)=>rank[status(a)]-rank[status(b)]||a.name.localeCompare(b.name));
+  const el=document.getElementById('clist');if(!el)return;
+  el.innerHTML=cs.length?cs.map(c=>{const p=plan(c.plan),st=status(c),vt=c.visits.includes(TD);
+    return `<div class="item" style="flex-wrap:wrap"><div class="body"><b>${esc(c.name)} <span class="small muted num">№ ${String(c.no).padStart(4,'0')}</span></b>
+      <span class="small muted num">${esc(tr(p.name))} · ${p.visits?`${Math.max(c.left,0)}/${p.visits}`:'∞'} · ${t('until')} ${fmt(c.until)}</span><br><span class="small muted num">${esc(c.phone)}</span></div>
+      <span class="pill ${st}">${stLabel(st)}</span>
+      <div class="sell" style="width:100%"><button class="btn sm ${vt?'':'primary'}" data-a="visit" data-k="${c.id}" ${vt||st==='bad'?'disabled':''}>${vt?t('already'):st==='bad'?t('noLeft'):t('visit')}</button>
+      <select id="sp_${c.id}" aria-label="${t('sell')}">${S.plans.map(pp=>`<option value="${pp.id}" ${pp.id===c.plan?'selected':''}>${esc(tr(pp.name))}</option>`).join('')}</select>
+      <button class="btn sm" data-a="sell" data-k="${c.id}">${t('sell')}</button></div></div>`;}).join(''):`<div class="empty">—</div>`;
+}
+
+function chart(ws){
+  const pts=ws.slice().reverse().map(w=>{const its=w.items.filter(i=>i.ex===ui.exSel);return its.length?{d:w.date,v:Math.max(...its.map(i=>+i.w))}:null}).filter(Boolean);
+  if(pts.length<2)return `<div class="empty">${t('noData')}</div>`;
+  const W=340,H=170,L=34,R=14,Tp=22,B=26;
+  let mn=Math.min(...pts.map(p=>p.v)),mx=Math.max(...pts.map(p=>p.v));
+  const step=mx-mn>40?20:mx-mn>15?10:5;mn=Math.floor(mn/step)*step;mx=Math.ceil(mx/step)*step;if(mx===mn)mx+=step;
+  const x=i=>L+(W-L-R)*i/(pts.length-1),y=v=>Tp+(H-Tp-B)*(1-(v-mn)/(mx-mn));
+  let g='';for(let v=mn;v<=mx;v+=step)g+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="axis" x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
+  const line=pts.map((p,i)=>`${x(i)},${y(p.v)}`).join(' ');
+  const area=`${L},${H-B} ${line} ${x(pts.length-1)},${H-B}`;
+  const last=pts[pts.length-1],first=pts[0];
+  const delta=last.v-first.v;
+  return `<div class="row small"><span class="muted">${t('bestW')}</span><b class="num">${Math.max(...pts.map(p=>p.v))} ${t('kg')}</b><div class="spacer"></div><span class="pill ${delta>=0?'ok':'bad'} num">${delta>=0?'+':''}${delta} ${t('kg')}</span></div>
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(tr(EX[ui.exSel]))}">${g}<polygon class="ar" points="${area}"/><polyline class="ln" points="${line}"/>
+  ${pts.map((p,i)=>`<circle class="dt" cx="${x(i)}" cy="${y(p.v)}" r="${i===pts.length-1?5:3}"/>`).join('')}
+  <text class="lbl" x="${x(pts.length-1)}" y="${y(last.v)-10}" text-anchor="end">${last.v}</text>
+  <text class="axis" x="${L}" y="${H-6}">${fmt(first.d)}</text><text class="axis" x="${W-R}" y="${H-6}" text-anchor="end">${fmt(last.d)}</text></svg>`;
+}
+
+function syncRows(){ui.rows.forEach((r,i)=>{['ex','sets','reps','w'].forEach(f=>{const el=document.getElementById('r'+i+f);if(el)r[f]=el.value;});});}
+const val=id=>(document.getElementById(id)?.value||'').trim();
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b||b.disabled)return;
+  if(b.dataset.lang){S.lang=b.dataset.lang;save();render();return;}
+  if(b.dataset.role){S.role=b.dataset.role;ui.tab=null;save();render();window.scrollTo(0,0);return;}
+  if(b.dataset.tab){ui.tab=b.dataset.tab;ui.armed=null;render();window.scrollTo(0,0);return;}
+  const a=b.dataset.a;if(!a)return;
+  const armed=ui.armed;ui.armed=null;
+  switch(a){
+  case'reset': if(armed!=='reset'){ui.armed='reset';renderChrome();return;} {const l=S.lang,r=S.role;S=seed();S.lang=l;S.role=r;save();toast(t('resetDone'));} break;
+  case'day': ui.day=b.dataset.d;break;
+  case'aday': ui.aday=b.dataset.d;break;
+  case'book':{const key=b.dataset.k+'|'+b.dataset.d;(S.bookings[key]||(S.bookings[key]=[])).push(S.me);save();toast(t('bookedT'));break;}
+  case'unbook':{const key=b.dataset.k+'|'+b.dataset.d;S.bookings[key]=(S.bookings[key]||[]).filter(x=>x!==S.me);save();toast(t('cancelT'));break;}
+  case'addrow': syncRows();ui.rows.push({ex:'bench',sets:3,reps:8,w:''});break;
+  case'rmrow': syncRows();ui.rows.splice(+b.dataset.i,1);break;
+  case'savew':{syncRows();const items=ui.rows.filter(r=>r.w!==''&&+r.sets>0&&+r.reps>0).map(r=>({ex:r.ex,sets:+r.sets,reps:+r.reps,w:+r.w}));
+    if(!items.length){toast(t('fillAll'));return;}
+    const ex=S.workouts.find(w=>w.client===S.me&&w.date===TD);
+    if(ex)ex.items.push(...items);else S.workouts.push({id:uid(),client:S.me,date:TD,items});
+    ui.exSel=items[0].ex;ui.rows=[{ex:'squat',sets:5,reps:5,w:''}];save();toast(t('savedW'));break;}
+  case'copy': try{navigator.clipboard.writeText(b.dataset.v).then(()=>toast(t('copied')),()=>{});}catch(err){} return;
+  case'visit':{const c=client(b.dataset.k);if(c.visits.includes(TD))return;c.visits.unshift(TD);if(c.left!=null)c.left--;save();toast(t('visitT'));break;}
+  case'sell':{const c=client(b.dataset.k),p=plan(document.getElementById('sp_'+c.id).value);c.plan=p.id;c.left=p.visits;c.until=iso(addDays(TODAY,p.days));save();toast(t('sellT'));break;}
+  case'addclient':{const n=val('ncName'),ph=val('ncPhone'),p=plan(val('ncPlan'));if(!n||!ph){toast(t('fillAll'));return;}
+    const no=Math.max(...S.clients.map(c=>c.no))+1;S.clients.push({id:uid(),no,name:n,phone:ph,plan:p.id,left:p.visits,until:iso(addDays(TODAY,p.days)),visits:[]});ui.q='';save();toast(t('addedC'));break;}
+  case'addclass':{const title=val('kTitle'),tri=val('kTrainer'),time=val('kTime'),days=[0,1,2,3,4,5,6].filter(i=>document.getElementById('kd'+i).checked);
+    if(!title||!tri||!time||!days.length){toast(t('fillAll'));return;}
+    S.classes.push({id:uid(),days,time,dur:+val('kDur')||60,title,trainer:tri,cap:+val('kCap')||8});save();toast(t('addedK'));break;}
+  case'delclass': if(armed!=='k'+b.dataset.k){ui.armed='k'+b.dataset.k;break;} S.classes=S.classes.filter(c=>c.id!==b.dataset.k);save();toast(t('deleted'));break;
+  case'addnews':{const ti=val('nTitle'),tx=val('nText');if(!ti||!tx){toast(t('fillAll'));return;}S.news.push({id:uid(),date:TD,title:ti,text:tx});save();toast(t('published'));break;}
+  case'delnews': if(armed!=='n'+b.dataset.k){ui.armed='n'+b.dataset.k;break;} S.news=S.news.filter(n=>n.id!==b.dataset.k);save();toast(t('deleted'));break;
+  }
+  render();
+});
+document.addEventListener('change',e=>{if(e.target.id==='exSel'){ui.exSel=e.target.value;syncRows();render();}});
+document.addEventListener('input',e=>{if(e.target.id==='q'){ui.q=e.target.value;renderClientList();}});
+render();
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,420 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Сайт залу Зал</title>
+<meta name="description" content="Тренажерний зал з фірмовим обладнанням: заняття для дорослих і дітей, тренери, ціни, години роботи.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E6EAE9; --surface:#FFFFFF; --surface2:#F2F4F4; --ink:#14181B; --muted:#5A646A; --line:#D1D7D6;
+  --accent:#1D53D1; --accent-ink:#FFFFFF; --accent-soft:#E3EAFB;
+  --ok:#23864F; --ok-soft:#E1F2E8; --warn:#B87A00; --warn-soft:#FBF0D6;
+  --band:#14181B; --band-ink:#E6EAE9; --band-muted:#9AA4AA; --band-line:#2B3237;
+  --z1:#1D53D1; --z2:#5B80DC; --z3:#93AAE6; --z4:#14181B; --z5:#5A646A; --z6:#A3ACB0; --z7:#C9CFCF;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0D1013; --surface:#161A1E; --surface2:#1D2227; --ink:#E7EBED; --muted:#96A0A6; --line:#2A3137;
+    --accent:#6A93FF; --accent-ink:#0A0F1C; --accent-soft:#1A2440;
+    --ok:#4CC282; --ok-soft:#15291E; --warn:#E3AE3A; --warn-soft:#2D2413;
+    --band:#1D2227; --band-ink:#E7EBED; --band-muted:#96A0A6; --band-line:#343C43;
+    --z1:#6A93FF; --z2:#4A6FCC; --z3:#34508F; --z4:#E7EBED; --z5:#96A0A6; --z6:#5E686E; --z7:#3A4248;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0D1013; --surface:#161A1E; --surface2:#1D2227; --ink:#E7EBED; --muted:#96A0A6; --line:#2A3137;
+  --accent:#6A93FF; --accent-ink:#0A0F1C; --accent-soft:#1A2440;
+  --ok:#4CC282; --ok-soft:#15291E; --warn:#E3AE3A; --warn-soft:#2D2413;
+  --band:#1D2227; --band-ink:#E7EBED; --band-muted:#96A0A6; --band-line:#343C43;
+  --z1:#6A93FF; --z2:#4A6FCC; --z3:#34508F; --z4:#E7EBED; --z5:#96A0A6; --z6:#5E686E; --z7:#3A4248;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px}
+a{color:var(--accent)}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px}
+.brand{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:.05em;line-height:1;text-decoration:none;color:var(--ink)}
+nav.links{flex:1;min-width:0;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.links::-webkit-scrollbar{display:none}
+nav.links a{flex:none;text-decoration:none;color:var(--muted);font:600 13px var(--body);letter-spacing:.05em;text-transform:uppercase;padding:6px 8px;border-radius:6px}
+nav.links a:hover{color:var(--ink);background:var(--surface2)}
+.seg{display:inline-flex;flex:none;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--muted);font:600 12px var(--body);padding:6px 9px;cursor:pointer;letter-spacing:.04em}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.demo{font-size:13px;color:var(--muted);background:var(--surface2);border:1px dashed var(--line);border-radius:8px;padding:8px 12px;margin-top:16px}
+
+/* type */
+h1,h2{font-family:var(--display);font-weight:800;letter-spacing:.01em;line-height:.95;margin:0;text-wrap:balance}
+h1{font-size:clamp(46px,8.4vw,92px);text-transform:uppercase}
+h2{font-size:clamp(34px,5vw,52px);text-transform:uppercase}
+h3{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.02em;margin:0;line-height:1.1}
+.eyebrow{font:600 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lead{font-size:18px;max-width:34em;margin:0;color:var(--ink)}
+p{margin:0}
+
+section{padding-block:56px;border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;max-width:44em}
+.sec-head p{color:var(--muted)}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 15px var(--body);border-radius:8px;padding:11px 16px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.sm{padding:6px 10px;font-size:13px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pill{display:inline-block;font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:end;padding-block:40px 56px}
+.hero-l{display:flex;flex-direction:column;gap:22px}
+.hero-l h1 em{font-style:normal;color:var(--accent)}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.band{background:var(--band);color:var(--band-ink);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:18px}
+.band .open{display:flex;align-items:center;gap:10px;font-weight:600}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--band-muted);flex:none}
+.dot.on{background:#3FBF77;box-shadow:0 0 0 4px rgba(63,191,119,.2)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--band-line);border-radius:10px;overflow:hidden}
+.fact{background:var(--band);padding:14px 12px}
+.fact b{display:block;font-family:var(--display);font-weight:800;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.fact b small{font-size:20px;font-weight:600;color:var(--band-muted)}
+.fact span{font-size:13px;color:var(--band-muted)}
+.plates{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.plates i{display:block;width:12px;height:30px;border-radius:3px;background:currentColor}
+.plates i:nth-child(odd){height:36px}
+
+/* area */
+.area{display:flex;flex-direction:column;gap:14px}
+.areabar{display:flex;height:64px;border-radius:10px;overflow:hidden;gap:2px;background:var(--bg)}
+.areabar div{min-width:0}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px}
+.legend div{display:flex;align-items:baseline;gap:8px;font-size:15px}
+.legend i{width:12px;height:12px;border-radius:3px;flex:none;align-self:center}
+.legend b{margin-left:auto;font-variant-numeric:tabular-nums}
+.total{display:flex;align-items:baseline;gap:10px}
+.total b{font-family:var(--display);font-weight:800;font-size:56px;line-height:1}
+.amen{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:32px}
+.am{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.am b{font-family:var(--display);font-weight:800;font-size:32px;line-height:1}
+.am h3{font-size:18px}
+.am p{font-size:14px;color:var(--muted)}
+
+/* equipment */
+.eq{display:flex;flex-direction:column}
+.eqrow{display:grid;grid-template-columns:minmax(0,1.1fr) 90px minmax(0,1.4fr);gap:20px;align-items:center;padding-block:18px;border-top:1px solid var(--line)}
+.eqrow:last-child{border-bottom:1px solid var(--line)}
+.eqrow .for{font-size:14px;color:var(--muted);margin-top:4px}
+.eqrow .n{font-family:var(--display);font-weight:800;font-size:52px;line-height:1;font-variant-numeric:tabular-nums;color:var(--accent)}
+.eqrow .n small{display:block;font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.eqrow .what{font-size:14px;color:var(--muted);margin-top:8px}
+.eqrow .plates{color:var(--ink)}
+.eqrow .plates i{width:9px;height:24px}
+.eqrow .plates i:nth-child(odd){height:28px}
+.quality{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+
+/* classes */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.col{display:flex;flex-direction:column;gap:12px}
+.col>h3{font-size:26px;text-transform:uppercase;display:flex;align-items:baseline;gap:10px}
+.col>h3 span{font:500 14px var(--body);text-transform:none;color:var(--muted);letter-spacing:0}
+.cls{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;grid-template-columns:1fr auto;gap:6px 12px}
+.cls h3{font-size:21px}
+.cls .desc{grid-column:1/-1;font-size:14px;color:var(--muted)}
+.cls .meta{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;margin-top:4px}
+.cls .meta span b{font-weight:600}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.tm{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.mono{width:48px;height:48px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:24px}
+.tm h3{font-size:22px}
+.tm .role{font-size:14px;color:var(--muted)}
+.tm .tags{display:flex;flex-wrap:wrap;gap:4px}
+.tm .yrs{font-size:13px;color:var(--muted);margin-top:auto}
+.staff{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.staff h3{font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stafflist{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:0 24px}
+.stafflist div{display:flex;justify-content:space-between;gap:10px;padding-block:10px;border-top:1px solid var(--line);font-size:15px}
+.stafflist div span{color:var(--muted);text-align:right}
+
+/* prices */
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+.pg{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:6px}
+.pg.hl{background:var(--band);color:var(--band-ink);border-color:var(--band)}
+.pg.hl .pr small,.pg.hl .pnote{color:var(--band-muted)}
+.pg.hl .pr{border-color:var(--band-line)}
+.pg>h3{font-size:24px;text-transform:uppercase;margin-bottom:6px}
+.pr{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-block:10px;border-top:1px solid var(--line)}
+.pr span{min-width:0}
+.pr small{display:block;font-size:13px;color:var(--muted)}
+.pr b{font-family:var(--display);font-weight:700;font-size:26px;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pnote{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* hours & contacts */
+.hc{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.hours{width:100%;border-collapse:collapse}
+.hours td{padding:10px 0;border-top:1px solid var(--line);font-size:16px}
+.hours td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.hours tr.today td{color:var(--accent);font-weight:700}
+.contact{display:flex;flex-direction:column;gap:16px}
+.cline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.cline .v{font-weight:600;font-size:20px;user-select:all}
+.lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.appbox{background:var(--band);color:var(--band-ink);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.appbox p{color:var(--band-muted);font-size:15px}
+footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;z-index:9}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .amen{grid-template-columns:1fr 1fr}
+  .prices{grid-template-columns:1fr}
+  .cols,.hc{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  nav.links{display:none}
+  header.top .wrap{justify-content:space-between}
+  .eqrow{grid-template-columns:1fr auto;gap:8px 16px}
+  .eqrow .viz{grid-column:1/-1}
+  section{padding-block:40px}
+}
+@media (max-width:400px){ .amen{grid-template-columns:1fr} .fact b{font-size:34px} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#top">ЗАЛ</a>
+  <nav class="links" id="nav"></nav>
+  <div class="seg" id="langSeg"><button data-lang="uk">UA</button><button data-lang="ru">RU</button></div>
+</div></header>
+
+<main id="top">
+  <div class="wrap"><div class="demo" id="demo"></div></div>
+  <div class="wrap hero" id="hero"></div>
+  <section id="about"><div class="wrap" id="aboutIn"></div></section>
+  <section id="equipment"><div class="wrap" id="eqIn"></div></section>
+  <section id="classes"><div class="wrap" id="clsIn"></div></section>
+  <section id="team"><div class="wrap" id="teamIn"></div></section>
+  <section id="prices"><div class="wrap" id="priceIn"></div></section>
+  <section id="contacts"><div class="wrap" id="contIn"></div></section>
+</main>
+<footer><div class="wrap" id="foot"></div></footer>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+/* ===== ДАНІ ЗАЛУ — замініть на реальні ===== */
+const C={
+  name:'ЗАЛ',
+  phone:'+380 00 000 00 00',
+  addr:{uk:'вул. Прикладна, 1',ru:'ул. Примерная, 1'},
+  appUrl:'app/',
+  // години: індекс 0 = понеділок
+  hours:[['07:00','22:00'],['07:00','22:00'],['07:00','22:00'],['07:00','22:00'],['07:00','22:00'],['09:00','20:00'],['09:00','20:00']],
+  zones:[
+    {m2:160,c:'--z1',n:{uk:'Тренажерна зона',ru:'Тренажёрная зона'}},
+    {m2:70, c:'--z2',n:{uk:'Вільні ваги',ru:'Свободные веса'}},
+    {m2:40, c:'--z3',n:{uk:'Функціональна зона і воркаут',ru:'Функциональная зона и воркаут'}},
+    {m2:35, c:'--z6',n:{uk:'Кардіо',ru:'Кардио'}},
+    {m2:85, c:'--z4',n:{uk:'Зала групових занять',ru:'Зал групповых занятий'}},
+    {m2:45, c:'--z5',n:{uk:'Роздягальні й душові',ru:'Раздевалки и душевые'}},
+    {m2:15, c:'--z7',n:{uk:'Рецепція',ru:'Ресепшен'}}],
+  amen:[
+    {v:'4',u:{uk:'кабіни',ru:'кабины'},t:{uk:'Душ',ru:'Душ'},d:{uk:'Дві чоловічі й дві жіночі кабіни, гаряча вода весь день.',ru:'Две мужские и две женские кабины, горячая вода весь день.'}},
+    {v:'2',u:{uk:'роздягальні',ru:'раздевалки'},t:{uk:'Роздягальні',ru:'Раздевалки'},d:{uk:'Чоловіча й жіноча, 40 шафок із замком, фен, лавки.',ru:'Мужская и женская, 40 шкафчиков с замком, фен, скамейки.'}},
+    {v:'+20…22',u:{uk:'°C',ru:'°C'},t:{uk:'Опалення взимку',ru:'Отопление зимой'},d:{uk:'Зал опалюється весь сезон, у роздягальнях тепла підлога.',ru:'Зал отапливается весь сезон, в раздевалках тёплый пол.'}},
+    {v:'24/7',u:{uk:'',ru:''},t:{uk:'Вентиляція',ru:'Вентиляция'},d:{uk:'Припливна вентиляція, кулер з питною водою, безкоштовний Wi-Fi.',ru:'Приточная вентиляция, кулер с питьевой водой, бесплатный Wi-Fi.'}}],
+  // n — кількість, stat:false — не рахувати в загальну кількість тренажерів
+  equip:[
+    {n:16,t:{uk:'Силові тренажери',ru:'Силовые тренажёры'},for:{uk:'Силові тренування, жіноча група, реабілітація',ru:'Силовые тренировки, женская группа, реабилитация'},w:{uk:'Блокові та важільні тренажери, жим ногами 45°, машина Сміта, гіперекстензія',ru:'Блочные и рычажные тренажёры, жим ногами 45°, машина Смита, гиперэкстензия'}},
+    {n:8,t:{uk:'Вільні ваги',ru:'Свободные веса'},for:{uk:'Техніка базових вправ, силова підготовка',ru:'Техника базовых упражнений, силовая подготовка'},w:{uk:'3 силові рами, 5 лав. Гантелі 2–50 кг, 6 грифів, диски до 400 кг',ru:'3 силовые рамы, 5 скамеек. Гантели 2–50 кг, 6 грифов, диски до 400 кг'}},
+    {n:10,t:{uk:'Функціональна зона і воркаут',ru:'Функциональная зона и воркаут'},for:{uk:'Функціональний тренінг, кросфіт, воркаут, дитячі групи',ru:'Функциональный тренинг, кроссфит, воркаут, детские группы'},w:{uk:'Турніки, бруси, шведська стінка, 4 петлі TRX, гирі 8–32 кг, плиобокси',ru:'Турники, брусья, шведская стенка, 4 петли TRX, гири 8–32 кг, плиобоксы'}},
+    {n:6,t:{uk:'Кардіо',ru:'Кардио'},for:{uk:'Розминка, фітнес, схуднення',ru:'Разминка, фитнес, похудение'},w:{uk:'2 бігові доріжки, 2 велотренажери, еліптичний і гребний тренажери',ru:'2 беговые дорожки, 2 велотренажёра, эллиптический и гребной тренажёры'}},
+    {n:14,stat:false,t:{uk:'Місця для пілатесу і стретчингу',ru:'Места для пилатеса и стретчинга'},for:{uk:'Пілатес, стретчинг, дитячі заняття',ru:'Пилатес, стретчинг, детские занятия'},w:{uk:'14 килимків, фітболи, ролики, еластичні стрічки',ru:'14 ковриков, фитболы, ролики, эластичные ленты'}}],
+  adults:[
+    {t:{uk:'Фітнес',ru:'Фитнес'},d:{uk:'Загальна фізична підготовка під музику, для будь-якого рівня.',ru:'Общая физическая подготовка под музыку, для любого уровня.'},when:{uk:'Пн, Ср, Пт · 18:00',ru:'Пн, Ср, Пт · 18:00'},dur:55,tr:'Марія',f:'g'},
+    {t:{uk:'Пілатес',ru:'Пилатес'},d:{uk:'Глибокі м’язи, постава, гнучкість. Група до 12 людей.',ru:'Глубокие мышцы, осанка, гибкость. Группа до 12 человек.'},when:{uk:'Вт, Чт · 10:00 і 20:00',ru:'Вт, Чт · 10:00 и 20:00'},dur:55,tr:'Олена',f:'g'},
+    {t:{uk:'Воркаут',ru:'Воркаут'},d:{uk:'Вправи з власною вагою: підтягування, віджимання, бруси.',ru:'Упражнения с собственным весом: подтягивания, отжимания, брусья.'},when:{uk:'Вт, Чт, Сб · 19:30',ru:'Вт, Чт, Сб · 19:30'},dur:60,tr:'Андрій',f:'g'},
+    {t:{uk:'Функціональний тренінг',ru:'Функциональный тренинг'},d:{uk:'Кругове тренування на витривалість і силу.',ru:'Круговая тренировка на выносливость и силу.'},when:{uk:'Пн, Ср, Пт · 07:30',ru:'Пн, Ср, Пт · 07:30'},dur:50,tr:'Сергій',f:'g'},
+    {t:{uk:'Техніка базових вправ',ru:'Техника базовых упражнений'},d:{uk:'Присідання, жим, тяга. Малі групи до 6 людей.',ru:'Приседания, жим, тяга. Малые группы до 6 человек.'},when:{uk:'Пн, Ср · 19:00',ru:'Пн, Ср · 19:00'},dur:60,tr:'Віктор',f:'g'},
+    {t:{uk:'Стретчинг',ru:'Стретчинг'},d:{uk:'Розтяжка та відновлення після силових.',ru:'Растяжка и восстановление после силовых.'},when:{uk:'Сб · 10:00',ru:'Сб · 10:00'},dur:45,tr:'Олена',f:'g'},
+    {t:{uk:'Персональні тренування',ru:'Персональные тренировки'},d:{uk:'Програма під вашу ціль, тренер поруч усе заняття.',ru:'Программа под вашу цель, тренер рядом всё занятие.'},when:{uk:'За домовленістю',ru:'По договорённости'},dur:60,tr:null,f:'i'}],
+  kids:[
+    {t:{uk:'Дитячий фітнес',ru:'Детский фитнес'},age:'6–9',d:{uk:'Ігрова ОФП: координація, спритність, правильна постава.',ru:'Игровая ОФП: координация, ловкость, правильная осанка.'},when:{uk:'Пн, Ср · 16:30',ru:'Пн, Ср · 16:30'},dur:45,tr:'Марія'},
+    {t:{uk:'Дитячий пілатес',ru:'Детский пилатес'},age:'7–12',d:{uk:'Вправи для спини й постави на килимках.',ru:'Упражнения для спины и осанки на ковриках.'},when:{uk:'Сб · 11:00',ru:'Сб · 11:00'},dur:45,tr:'Олена'},
+    {t:{uk:'Воркаут для підлітків',ru:'Воркаут для подростков'},age:'10–15',d:{uk:'Турніки й бруси, перші підтягування, робота з власною вагою.',ru:'Турники и брусья, первые подтягивания, работа с собственным весом.'},when:{uk:'Вт, Чт · 16:30',ru:'Вт, Чт · 16:30'},dur:60,tr:'Андрій'},
+    {t:{uk:'Силова підготовка',ru:'Силовая подготовка'},age:'14–17',d:{uk:'Техніка вправ зі штангою під наглядом тренера, помірні ваги.',ru:'Техника упражнений со штангой под наблюдением тренера, умеренные веса.'},when:{uk:'Пн, Ср, Пт · 17:30',ru:'Пн, Ср, Пт · 17:30'},dur:60,tr:'Віктор'}],
+  trainers:[
+    {n:'Сергій',r:{uk:'Старший тренер',ru:'Старший тренер'},s:{uk:['Функціональний тренінг','Кросфіт'],ru:['Функциональный тренинг','Кроссфит']},y:9},
+    {n:'Віктор',r:{uk:'Тренер з силової підготовки',ru:'Тренер по силовой подготовке'},s:{uk:['Техніка базових вправ','Підлітки'],ru:['Техника базовых упражнений','Подростки']},y:12},
+    {n:'Олена',r:{uk:'Тренерка групових програм',ru:'Тренер групповых программ'},s:{uk:['Пілатес','Стретчинг','Жіноча група'],ru:['Пилатес','Стретчинг','Женская группа']},y:7},
+    {n:'Марія',r:{uk:'Фітнес-тренерка',ru:'Фитнес-тренер'},s:{uk:['Фітнес','Дитячий фітнес'],ru:['Фитнес','Детский фитнес']},y:5},
+    {n:'Андрій',r:{uk:'Тренер з воркауту',ru:'Тренер по воркауту'},s:{uk:['Воркаут','Підлітки'],ru:['Воркаут','Подростки']},y:6}],
+  staff:[
+    {n:'Олександр',r:{uk:'Керівник залу',ru:'Руководитель зала'}},
+    {n:'Наталія',r:{uk:'Адміністраторка, ранкова зміна',ru:'Администратор, утренняя смена'}},
+    {n:'Ігор',r:{uk:'Адміністратор, вечірня зміна',ru:'Администратор, вечерняя смена'}}],
+  prices:[
+    {t:{uk:'Абонементи в зал',ru:'Абонементы в зал'},hl:true,items:[
+      {n:{uk:'Разове відвідування',ru:'Разовое посещение'},p:150},
+      {n:{uk:'8 відвідувань',ru:'8 посещений'},s:{uk:'діє 30 днів',ru:'действует 30 дней'},p:900},
+      {n:{uk:'12 відвідувань',ru:'12 посещений'},s:{uk:'діє 30 днів',ru:'действует 30 дней'},p:1200},
+      {n:{uk:'Безліміт',ru:'Безлимит'},s:{uk:'30 днів',ru:'30 дней'},p:1500},
+      {n:{uk:'Дитячий / підлітковий',ru:'Детский / подростковый'},s:{uk:'8 відвідувань, 30 днів',ru:'8 посещений, 30 дней'},p:800}],
+     note:{uk:'Абонемент дає вхід у тренажерну зону. Групові заняття оплачуються окремо.',ru:'Абонемент даёт вход в тренажёрную зону. Групповые занятия оплачиваются отдельно.'}},
+    {t:{uk:'Групові заняття',ru:'Групповые занятия'},items:[
+      {n:{uk:'Разове заняття',ru:'Разовое занятие'},s:{uk:'фітнес, воркаут, функціональний',ru:'фитнес, воркаут, функциональный'},p:200},
+      {n:{uk:'Пілатес, разове',ru:'Пилатес, разовое'},p:220},
+      {n:{uk:'8 групових занять',ru:'8 групповых занятий'},s:{uk:'будь-які напрями, 30 днів',ru:'любые направления, 30 дней'},p:1300},
+      {n:{uk:'Дитяча група, 8 занять',ru:'Детская группа, 8 занятий'},s:{uk:'30 днів',ru:'30 дней'},p:900}],
+     note:{uk:'Перше групове заняття для нових клієнтів безкоштовне.',ru:'Первое групповое занятие для новых клиентов бесплатно.'}},
+    {t:{uk:'Індивідуальні',ru:'Индивидуальные'},items:[
+      {n:{uk:'Персональне тренування',ru:'Персональная тренировка'},s:{uk:'60 хв',ru:'60 мин'},p:450},
+      {n:{uk:'Пакет 10 тренувань',ru:'Пакет 10 тренировок'},s:{uk:'діє 60 днів',ru:'действует 60 дней'},p:4000},
+      {n:{uk:'Спліт-тренування',ru:'Сплит-тренировка'},s:{uk:'для двох, 60 хв',ru:'для двоих, 60 мин'},p:650},
+      {n:{uk:'Дитяче індивідуальне',ru:'Детское индивидуальное'},s:{uk:'45 хв',ru:'45 мин'},p:350},
+      {n:{uk:'Програма тренувань',ru:'Программа тренировок'},s:{uk:'складання під вашу ціль',ru:'составление под вашу цель'},p:500}],
+     note:{uk:'Вхід у зал на час персонального тренування входить у ціну.',ru:'Вход в зал на время персональной тренировки входит в цену.'}}]
+};
+
+/* ===== Тексти інтерфейсу ===== */
+const T={
+uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Дані на сторінці приклад. Замініть ціни, розклад, тренерів і контакти на реальні.',
+ nav:{about:'Про зал',equipment:'Обладнання',classes:'Заняття',team:'Команда',prices:'Ціни',contacts:'Контакти'},
+ heroEy:'Тренажерний зал поруч з домом',heroH:'Зал без черги <em>до тренажерів</em>',heroP:'Невеликий зал з фірмовим обладнанням. Силова зона, пілатес, фітнес і воркаут для дорослих, окремі групи для дітей і підлітків. Тепло взимку, душ і роздягальні.',
+ toPrices:'Ціни',toTrial:'Пробне заняття',openNow:'Зараз відчинено, до',closedNow:'Зараз зачинено. Відкриємося о',m2:'м² площі',eq:'тренажерів і станцій',tr:'тренерів',shower:'душові кабіни',
+ aboutEy:'Про зал',aboutH:'Площа і зручності',aboutP:'Розподіл площі по зонах, м².',total:'загальна площа',
+ eqEy:'Обладнання',eqH:'Що є для кожного типу занять',eqP:'Кількість тренажерів і станцій по зонах.',units:'одиниць',places:'місць',
+ qT:'Фірмове обладнання',qP:'Усі тренажери фірмові, від перевірених виробників. Ми регулярно їх обслуговуємо, тож усе справне й безпечне.',
+ clsEy:'Заняття',clsH:'Для дорослих і дітей',clsP:'Групи невеликі, тож тренер бачить кожного. Записатися можна на рецепції або в застосунку.',adults:'Дорослі',kids:'Діти й підлітки',age:'років',group:'група',indiv:'індивідуально',trainer:'Тренер',
+ teamEy:'Команда',teamH:'Тренери та адміністрація',teamP:'Усі тренери мають профільну освіту або сертифікати.',yrs:'років досвіду',staffH:'Адміністрація',
+ prEy:'Ціни',prH:'Абонементи й послуги',prP:'Ціни в гривнях. Оплата на рецепції готівкою або карткою.',
+ cEy:'Контакти',cH:'Години роботи',addr:'Адреса',phone:'Телефон',copy:'Копіювати',copied:'Скопійовано',copyFail:'Виділіть номер і скопіюйте вручну',
+ appH:'Застосунок для клієнтів',appP:'Залишок занять, запис на групові, журнал тренувань і новини залу в телефоні.',appBtn:'Відкрити застосунок',
+ wd:['Понеділок','Вівторок','Середа','Четвер','Пʼятниця','Субота','Неділя'],today:'сьогодні',foot:'Тренажерний зал'},
+ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Данные на странице пример. Замените цены, расписание, тренеров и контакты на реальные.',
+ nav:{about:'О зале',equipment:'Оборудование',classes:'Занятия',team:'Команда',prices:'Цены',contacts:'Контакты'},
+ heroEy:'Тренажёрный зал рядом с домом',heroH:'Зал без очереди <em>к тренажёрам</em>',heroP:'Небольшой зал с фирменным оборудованием. Силовая зона, пилатес, фитнес и воркаут для взрослых, отдельные группы для детей и подростков. Тепло зимой, душ и раздевалки.',
+ toPrices:'Цены',toTrial:'Пробное занятие',openNow:'Сейчас открыто, до',closedNow:'Сейчас закрыто. Откроемся в',m2:'м² площади',eq:'тренажёров и станций',tr:'тренеров',shower:'душевые кабины',
+ aboutEy:'О зале',aboutH:'Площадь и удобства',aboutP:'Распределение площади по зонам, м².',total:'общая площадь',
+ eqEy:'Оборудование',eqH:'Что есть для каждого типа занятий',eqP:'Количество тренажёров и станций по зонам.',units:'единиц',places:'мест',
+ qT:'Фирменное оборудование',qP:'Все тренажёры фирменные, от проверенных производителей. Мы регулярно их обслуживаем, поэтому всё исправно и безопасно.',
+ clsEy:'Занятия',clsH:'Для взрослых и детей',clsP:'Группы небольшие, поэтому тренер видит каждого. Записаться можно на ресепшене или в приложении.',adults:'Взрослые',kids:'Дети и подростки',age:'лет',group:'группа',indiv:'индивидуально',trainer:'Тренер',
+ teamEy:'Команда',teamH:'Тренеры и администрация',teamP:'У всех тренеров есть профильное образование или сертификаты.',yrs:'лет опыта',staffH:'Администрация',
+ prEy:'Цены',prH:'Абонементы и услуги',prP:'Цены в гривнах. Оплата на ресепшене наличными или картой.',
+ cEy:'Контакты',cH:'Часы работы',addr:'Адрес',phone:'Телефон',copy:'Копировать',copied:'Скопировано',copyFail:'Выделите номер и скопируйте вручную',
+ appH:'Приложение для клиентов',appP:'Остаток занятий, запись на групповые, дневник тренировок и новости зала в телефоне.',appBtn:'Открыть приложение',
+ wd:['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'],today:'сегодня',foot:'Тренажёрный зал'}
+};
+const TRN={'Сергій':'Сергей','Віктор':'Виктор','Олена':'Елена','Марія':'Мария','Андрій':'Андрей','Олександр':'Александр','Наталія':'Наталья','Ігор':'Игорь'};
+
+let lang='uk';
+try{const s=localStorage.getItem('zal-landing-lang');if(s==='uk'||s==='ru')lang=s;}catch(e){}
+const L=()=>T[lang];
+const tr=x=>x==null?'':typeof x==='string'?x:(x[lang]??x.uk);
+const nm=n=>lang==='ru'?(TRN[n]||n):n;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=p=>p.toLocaleString(L().loc)+' '+L().cur;
+const head=(ey,h,p)=>`<div class="sec-head"><span class="eyebrow">${ey}</span><h2>${h}</h2>${p?`<p>${p}</p>`:''}</div>`;
+const plates=n=>{let h='';for(let i=0;i<n;i++)h+='<i></i>';return `<div class="plates" aria-hidden="true">${h}</div>`;};
+const toMin=s=>{const [h,m]=s.split(':').map(Number);return h*60+m;};
+
+function openState(){
+  const now=new Date(),d=(now.getDay()+6)%7,m=now.getHours()*60+now.getMinutes();
+  const [o,c]=C.hours[d];
+  if(m>=toMin(o)&&m<toMin(c))return{open:true,txt:`${L().openNow} ${c}`};
+  const next=m<toMin(o)?o:C.hours[(d+1)%7][0];
+  return{open:false,txt:`${L().closedNow} ${next}`};
+}
+
+function render(){
+  const l=L();
+  document.documentElement.lang=lang;
+  document.querySelectorAll('#langSeg button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+  document.getElementById('nav').innerHTML=Object.entries(l.nav).map(([k,v])=>`<a href="#${k}">${v}</a>`).join('');
+  document.getElementById('demo').textContent=l.demo;
+
+  const area=C.zones.reduce((s,z)=>s+z.m2,0);
+  const eqN=C.equip.filter(e=>e.stat!==false).reduce((s,e)=>s+e.n,0);
+  const st=openState();
+  document.getElementById('hero').innerHTML=`
+   <div class="hero-l"><span class="eyebrow">${l.heroEy}</span><h1>${l.heroH}</h1><p class="lead">${l.heroP}</p>
+    <div class="cta"><a class="btn primary" href="#prices">${l.toPrices}</a><a class="btn" href="#contacts">${l.toTrial}</a></div></div>
+   <div class="band">
+    <div class="open"><span class="dot ${st.open?'on':''}"></span><span class="num">${st.txt}</span></div>
+    <div class="facts">
+     <div class="fact"><b class="num">${area}</b><span>${l.m2}</span></div>
+     <div class="fact"><b class="num">${eqN}</b><span>${l.eq}</span></div>
+     <div class="fact"><b class="num">${C.trainers.length}</b><span>${l.tr}</span></div>
+     <div class="fact"><b class="num">${esc(C.amen[0].v)}</b><span>${l.shower}</span></div>
+    </div>
+    ${plates(eqN)}
+   </div>`;
+
+  document.getElementById('aboutIn').innerHTML=head(l.aboutEy,l.aboutH,l.aboutP)+`
+   <div class="area">
+    <div class="total"><b class="num">${area}</b><span class="muted">м² · ${l.total}</span></div>
+    <div class="areabar" role="img" aria-label="${esc(C.zones.map(z=>tr(z.n)+' '+z.m2+' м²').join(', '))}">${C.zones.map(z=>`<div style="flex:${z.m2};background:var(${z.c})"></div>`).join('')}</div>
+    <div class="legend">${C.zones.map(z=>`<div><i style="background:var(${z.c})"></i><span>${esc(tr(z.n))}</span><b>${z.m2} м²</b></div>`).join('')}</div>
+   </div>
+   <div class="amen">${C.amen.map(a=>`<div class="am"><b class="num">${esc(a.v)}${tr(a.u)?` <small style="font-size:18px;font-weight:600">${esc(tr(a.u))}</small>`:''}</b><h3>${esc(tr(a.t))}</h3><p>${esc(tr(a.d))}</p></div>`).join('')}</div>`;
+
+  document.getElementById('eqIn').innerHTML=head(l.eqEy,l.eqH,l.eqP)+`
+   <div class="eq">${C.equip.map(e=>`<div class="eqrow">
+     <div><h3>${esc(tr(e.t))}</h3><div class="for">${esc(tr(e.for))}</div></div>
+     <div class="n num">${e.n}<small>${e.stat===false?l.places:l.units}</small></div>
+     <div class="viz">${plates(e.n)}<div class="what">${esc(tr(e.w))}</div></div></div>`).join('')}</div>
+   <div class="quality"><h3>${l.qT}</h3><p class="muted" style="margin-top:6px;max-width:48em">${l.qP}</p></div>`;
+
+  const cls=(c,kid)=>`<div class="cls"><h3>${esc(tr(c.t))}</h3>${kid?`<span class="pill warn num">${c.age} ${l.age}</span>`:`<span class="pill ${c.f==='i'?'ok':''}">${c.f==='i'?l.indiv:l.group}</span>`}
+    <p class="desc">${esc(tr(c.d))}</p>
+    <div class="meta"><span class="num"><b>${esc(tr(c.when))}</b></span><span class="muted num">${c.dur} ${l.min}</span>${c.tr?`<span class="muted">${l.trainer}: ${esc(nm(c.tr))}</span>`:''}</div></div>`;
+  document.getElementById('clsIn').innerHTML=head(l.clsEy,l.clsH,l.clsP)+`
+   <div class="cols"><div class="col"><h3>${l.adults}</h3>${C.adults.map(c=>cls(c,false)).join('')}</div>
+   <div class="col"><h3>${l.kids}</h3>${C.kids.map(c=>cls(c,true)).join('')}</div></div>`;
+
+  document.getElementById('teamIn').innerHTML=head(l.teamEy,l.teamH,l.teamP)+`
+   <div class="team">${C.trainers.map(t=>`<div class="tm"><div class="mono">${esc(nm(t.n)[0])}</div><div><h3>${esc(nm(t.n))}</h3><div class="role">${esc(tr(t.r))}</div></div>
+    <div class="tags">${tr(t.s).map(s=>`<span class="pill">${esc(s)}</span>`).join('')}</div><div class="yrs num">${t.y} ${l.yrs}</div></div>`).join('')}</div>
+   <div class="staff"><h3>${l.staffH}</h3><div class="stafflist">${C.staff.map(s=>`<div><b>${esc(nm(s.n))}</b><span>${esc(tr(s.r))}</span></div>`).join('')}</div></div>`;
+
+  document.getElementById('priceIn').innerHTML=head(l.prEy,l.prH,l.prP)+`
+   <div class="prices">${C.prices.map(g=>`<div class="pg ${g.hl?'hl':''}"><h3>${esc(tr(g.t))}</h3>
+    ${g.items.map(i=>`<div class="pr"><span>${esc(tr(i.n))}${i.s?`<small>${esc(tr(i.s))}</small>`:''}</span><b>${money(i.p)}</b></div>`).join('')}
+    ${g.note?`<p class="pnote">${esc(tr(g.note))}</p>`:''}</div>`).join('')}</div>`;
+
+  const td=(new Date().getDay()+6)%7;
+  document.getElementById('contIn').innerHTML=head(l.cEy,l.cH,'')+`
+   <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}</td><td>${h[0]}–${h[1]}</td></tr>`).join('')}</tbody></table></div>
+   <div class="contact">
+    <div><div class="lbl">${l.phone}</div><div class="cline"><span class="v num" id="phoneV">${esc(C.phone)}</span><button class="btn sm" id="copyBtn">${l.copy}</button></div></div>
+    <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span></div></div>
+    <div class="appbox"><h3>${l.appH}</h3><p>${l.appP}</p><div><a class="btn primary" href="${C.appUrl}" >${l.appBtn}</a></div></div>
+   </div></div>`;
+
+  document.getElementById('foot').textContent=`${C.name} · ${l.foot} · ${tr(C.addr)}`;
+}
+
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2000);}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.lang){lang=b.dataset.lang;try{localStorage.setItem('zal-landing-lang',lang);}catch(err){}render();return;}
+  if(b.id==='copyBtn'){
+    const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('phoneV'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast(L().copyFail);};
+    try{navigator.clipboard.writeText(C.phone).then(()=>toast(L().copied),sel);}catch(err){sel();}
+  }
+});
+render();
+})();
+</script>
+
+</html>
