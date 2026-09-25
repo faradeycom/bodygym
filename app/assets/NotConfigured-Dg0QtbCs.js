@@ -1,0 +1,1 @@
+import{a as e,b as t,c as n,tt as r}from"./runtime-core.esm-bundler-T3ZtwtpW.js";import{u as i}from"./index-DSoMflC5.js";var a={},o={class:`stack`},s={class:`muted`};function c(i,a){return t(),n(`div`,o,[e(`h1`,null,r(i.$t(`cfg.title`)),1),e(`p`,s,r(i.$t(`cfg.text`)),1)])}var l=i(a,[[`render`,c]]);export{l as default};
