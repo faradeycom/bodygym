@@ -127,7 +127,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .col>h3{font-size:26px;text-transform:uppercase;display:flex;align-items:baseline;gap:10px}
 .col>h3 span{font:500 14px var(--body);text-transform:none;color:var(--muted);letter-spacing:0}
 .cls{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;grid-template-columns:1fr auto;gap:6px 12px}
-.cls h3{font-size:21px}
+.cols>*,.find>*,.hc>*{min-width:0}
+.cls h3{font-size:21px;min-width:0;overflow-wrap:break-word}
 .cls .desc{grid-column:1/-1;font-size:14px;color:var(--muted)}
 .cls .meta{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;margin-top:4px}
 .cls .meta span b{font-weight:600}
