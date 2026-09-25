@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/sporthub/app/sw.js', { scope: '/sporthub/app/' })})}
