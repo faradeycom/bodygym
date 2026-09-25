@@ -76,11 +76,14 @@ section{padding-block:56px;border-top:1px solid var(--line)}
 /* section with a photo across its top that fades into the page; cards below stay on the page theme */
 .topphoto{position:relative;isolation:isolate;border-top:0}
 .topphoto::before{content:"";position:absolute;left:0;right:0;top:0;height:720px;z-index:-1;
-  background:linear-gradient(180deg,rgba(10,13,17,.6) 0%,rgba(10,13,17,.45) 55%,rgba(10,13,17,0) 100%),url("img/classes.jpg") center 35%/cover;
+  background:linear-gradient(180deg,rgba(10,13,17,.6) 0%,rgba(10,13,17,.45) 55%,rgba(10,13,17,0) 100%),var(--photo) var(--photo-pos,center)/cover;
   -webkit-mask-image:linear-gradient(180deg,#000 75%,transparent 100%);mask-image:linear-gradient(180deg,#000 75%,transparent 100%)}
 .topphoto .sec-head,.topphoto .col>h3{color:#F2F5F7;text-shadow:0 1px 3px rgba(0,0,0,.75),0 0 16px rgba(0,0,0,.45)}
 .topphoto .sec-head p,.topphoto .sec-head .eyebrow,.topphoto .col>h3 span{color:#DCE3E8}
 .topphoto .sec-head{margin-bottom:200px}
+.topphoto .eq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding-inline:18px}
+.topphoto .eqrow:first-child{border-top:0}
+.topphoto .eqrow:last-child{border-bottom:0}
 @media (max-width:620px){.topphoto .sec-head{margin-bottom:140px}}
 /* columns stack below 900px: the second column title sits far below the photo, so it keeps page colors */
 @media (max-width:900px){.topphoto .col+.col>h3{color:var(--ink);text-shadow:none}.topphoto .col+.col>h3 span{color:var(--muted)}}
@@ -258,8 +261,8 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
   <div class="wrap"><div class="demo" id="demo"></div></div>
   <div class="herobg"><div class="wrap hero" id="hero"></div></div>
   <section id="about" class="photosec"><div class="wrap" id="aboutIn"></div></section>
-  <section id="equipment"><div class="wrap" id="eqIn"></div></section>
-  <section id="classes" class="topphoto"><div class="wrap" id="clsIn"></div></section>
+  <section id="equipment" class="topphoto" style="--photo:url('img/equipment.jpg');--photo-pos:center 45%"><div class="wrap" id="eqIn"></div></section>
+  <section id="classes" class="topphoto" style="--photo:url('img/classes.jpg');--photo-pos:center 35%"><div class="wrap" id="clsIn"></div></section>
   <section id="team"><div class="wrap" id="teamIn"></div></section>
   <section id="prices"><div class="wrap" id="priceIn"></div></section>
   <section id="contacts"><div class="wrap" id="contIn"></div></section>
