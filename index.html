@@ -174,7 +174,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 
 /* team */
 .team{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
-.tm{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.tm{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .3s,border-color .3s}
+.tm:target,.tm.flash{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.trlink{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.trlink:hover{text-decoration-thickness:2px}
 .mono{width:48px;height:48px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:24px}
 .tm h3{font-size:22px}
 .tm .role{font-size:14px;color:var(--muted)}
@@ -393,6 +396,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const money=p=>p.toLocaleString(L().loc)+' '+L().cur;
 const head=(ey,h,p)=>`<div class="sec-head"><span class="eyebrow">${ey}</span><h2>${h}</h2>${p?`<p>${p}</p>`:''}</div>`;
 const plates=n=>{let h='';for(let i=0;i<n;i++)h+='<i></i>';return `<div class="plates" aria-hidden="true">${h}</div>`;};
+const trIdx=n=>C.trainers.findIndex(t=>t.n===n);
 const toMin=s=>{const [h,m]=s.split(':').map(Number);return h*60+m;};
 
 function openState(){
@@ -445,13 +449,13 @@ function render(){
 
   const cls=(c,kid)=>`<div class="cls"><h3>${esc(tr(c.t))}</h3>${kid?`<span class="pill warn num">${c.age} ${l.age}</span>`:`<span class="pill ${c.f==='i'?'ok':''}">${c.f==='i'?l.indiv:l.group}</span>`}
     <p class="desc">${esc(tr(c.d))}</p>
-    <div class="meta"><span class="num"><b>${esc(tr(c.when))}</b></span><span class="muted num">${c.dur} ${l.min}</span>${c.tr?`<span class="muted">${l.trainer}: ${esc(nm(c.tr))}</span>`:''}</div></div>`;
+    <div class="meta"><span class="num"><b>${esc(tr(c.when))}</b></span><span class="muted num">${c.dur} ${l.min}</span>${c.tr?`<span class="muted">${l.trainer}: ${trIdx(c.tr)>=0?`<a class="trlink" href="#tr-${trIdx(c.tr)}">${esc(nm(c.tr))}</a>`:esc(nm(c.tr))}</span>`:''}</div></div>`;
   document.getElementById('clsIn').innerHTML=head(l.clsEy,l.clsH,l.clsP)+`
    <div class="cols"><div class="col"><h3>${l.adults}</h3>${C.adults.map(c=>cls(c,false)).join('')}</div>
    <div class="col"><h3>${l.kids}</h3>${C.kids.map(c=>cls(c,true)).join('')}</div></div>`;
 
   document.getElementById('teamIn').innerHTML=head(l.teamEy,l.teamH,l.teamP)+`
-   <div class="team">${C.trainers.map(t=>`<div class="tm"><div class="mono">${esc(nm(t.n)[0])}</div><div><h3>${esc(nm(t.n))}</h3><div class="role">${esc(tr(t.r))}</div></div>
+   <div class="team">${C.trainers.map((t,i)=>`<div class="tm" id="tr-${i}"><div class="mono">${esc(nm(t.n)[0])}</div><div><h3>${esc(nm(t.n))}</h3><div class="role">${esc(tr(t.r))}</div></div>
     <div class="tags">${tr(t.s).map(s=>`<span class="pill">${esc(s)}</span>`).join('')}</div><div class="yrs num">${t.y} ${l.yrs}</div></div>`).join('')}</div>
    <div class="staff"><h3>${l.staffH}</h3><div class="stafflist">${C.staff.map(s=>`<div><b>${esc(nm(s.n))}</b><span>${esc(tr(s.r))}</span></div>`).join('')}</div></div>`;
 
@@ -492,6 +496,8 @@ function render(){
 
 function toast(m){const el=document.getElementById('toast');el.textContent=m;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2000);}
 document.addEventListener('click',e=>{
+  const tl=e.target.closest('.trlink');
+  if(tl){const card=document.querySelector(tl.getAttribute('href'));if(card){document.querySelectorAll('.tm.flash').forEach(x=>x.classList.remove('flash'));card.classList.add('flash');setTimeout(()=>card.classList.remove('flash'),2500);}return;}
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.lang){lang=b.dataset.lang;try{localStorage.setItem('zal-landing-lang',lang);}catch(err){}render();return;}
   if(b.dataset.copy){
