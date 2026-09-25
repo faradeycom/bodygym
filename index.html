@@ -169,8 +169,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .cline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .cline .v{font-weight:600;font-size:20px;user-select:all}
 .lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.appbox{background:var(--band);color:var(--band-ink);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:12px;margin-top:8px}
-.appbox p{color:var(--band-muted);font-size:15px}
+.appbtn{flex:none}
+.appbtn .sh{display:none}
 footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;z-index:9}
 
@@ -182,7 +182,10 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
 }
 @media (max-width:620px){
   nav.links{display:none}
-  header.top .wrap{justify-content:space-between}
+  header.top .wrap{justify-content:space-between;gap:10px}
+  .brand{margin-right:auto}
+  .appbtn .lg{display:none}
+  .appbtn .sh{display:inline}
   .eqrow{grid-template-columns:1fr auto;gap:8px 16px}
   .eqrow .viz{grid-column:1/-1}
   section{padding-block:40px}
@@ -194,6 +197,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
 <header class="top"><div class="wrap">
   <a class="brand" href="#top">ЗАЛ</a>
   <nav class="links" id="nav"></nav>
+  <a class="btn primary sm appbtn" id="appBtn" ></a>
   <div class="seg" id="langSeg"><button data-lang="uk">UA</button><button data-lang="ru">RU</button></div>
 </div></header>
 
@@ -299,7 +303,7 @@ uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Дані на сторінці при
  teamEy:'Команда',teamH:'Тренери та адміністрація',teamP:'Усі тренери мають профільну освіту або сертифікати.',yrs:'років досвіду',staffH:'Адміністрація',
  prEy:'Ціни',prH:'Абонементи й послуги',prP:'Ціни в гривнях. Оплата на рецепції готівкою або карткою.',
  cEy:'Контакти',cH:'Години роботи',addr:'Адреса',phone:'Телефон',copy:'Копіювати',copied:'Скопійовано',copyFail:'Виділіть номер і скопіюйте вручну',
- appH:'Застосунок для клієнтів',appP:'Залишок занять, запис на групові, журнал тренувань і новини залу в телефоні.',appBtn:'Відкрити застосунок',
+ appBtn:'Відкрити застосунок',appBtnS:'Застосунок',
  wd:['Понеділок','Вівторок','Середа','Четвер','Пʼятниця','Субота','Неділя'],today:'сьогодні',foot:'Тренажерний зал'},
 ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Данные на странице пример. Замените цены, расписание, тренеров и контакты на реальные.',
  nav:{about:'О зале',equipment:'Оборудование',classes:'Занятия',team:'Команда',prices:'Цены',contacts:'Контакты'},
@@ -312,7 +316,7 @@ ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Данные на странице 
  teamEy:'Команда',teamH:'Тренеры и администрация',teamP:'У всех тренеров есть профильное образование или сертификаты.',yrs:'лет опыта',staffH:'Администрация',
  prEy:'Цены',prH:'Абонементы и услуги',prP:'Цены в гривнах. Оплата на ресепшене наличными или картой.',
  cEy:'Контакты',cH:'Часы работы',addr:'Адрес',phone:'Телефон',copy:'Копировать',copied:'Скопировано',copyFail:'Выделите номер и скопируйте вручную',
- appH:'Приложение для клиентов',appP:'Остаток занятий, запись на групповые, дневник тренировок и новости зала в телефоне.',appBtn:'Открыть приложение',
+ appBtn:'Открыть приложение',appBtnS:'Приложение',
  wd:['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'],today:'сегодня',foot:'Тренажёрный зал'}
 };
 const TRN={'Сергій':'Сергей','Віктор':'Виктор','Олена':'Елена','Марія':'Мария','Андрій':'Андрей','Олександр':'Александр','Наталія':'Наталья','Ігор':'Игорь'};
@@ -339,6 +343,7 @@ function openState(){
 function render(){
   const l=L();
   document.documentElement.lang=lang;
+  const ab=document.getElementById('appBtn');ab.href=C.appUrl;ab.innerHTML=`<span class="lg">${l.appBtn}</span><span class="sh">${l.appBtnS}</span>`;
   document.querySelectorAll('#langSeg button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
   document.getElementById('nav').innerHTML=Object.entries(l.nav).map(([k,v])=>`<a href="#${k}">${v}</a>`).join('');
   document.getElementById('demo').textContent=l.demo;
@@ -397,9 +402,7 @@ function render(){
    <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}</td><td>${h[0]}–${h[1]}</td></tr>`).join('')}</tbody></table></div>
    <div class="contact">
     <div><div class="lbl">${l.phone}</div><div class="cline"><span class="v num" id="phoneV">${esc(C.phone)}</span><button class="btn sm" id="copyBtn">${l.copy}</button></div></div>
-    <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span></div></div>
-    <div class="appbox"><h3>${l.appH}</h3><p>${l.appP}</p><div><a class="btn primary" href="${C.appUrl}" >${l.appBtn}</a></div></div>
-   </div></div>`;
+    <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span></div></div>   </div></div>`;
 
   document.getElementById('foot').textContent=`${C.name} · ${l.foot} · ${tr(C.addr)}`;
 }
