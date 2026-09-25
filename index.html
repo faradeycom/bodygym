@@ -62,6 +62,17 @@ h3{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.02e
 p{margin:0}
 
 section{padding-block:56px;border-top:1px solid var(--line)}
+/* section on a photo: always the dark palette, whatever the page theme */
+.photosec{color-scheme:dark;border-top:0;
+  --ink:#F2F5F7; --muted:#C3CCD2; --line:rgba(255,255,255,.18); --surface:rgba(14,18,22,.62); --surface2:rgba(14,18,22,.5);
+  --accent:#8FB0FF; --accent-soft:rgba(106,147,255,.2);
+  --z1:#6A93FF; --z2:#4A6FCC; --z3:#34508F; --z4:#E7EBED; --z5:#96A0A6; --z6:#5E686E; --z7:#3A4248;
+  color:var(--ink);background-color:#0E1216;
+  background-image:linear-gradient(180deg,rgba(10,13,17,.7) 0%,rgba(10,13,17,.5) 45%,rgba(10,13,17,.62) 100%),url("img/about.jpg");
+  background-size:cover;background-position:center}
+.photosec .sec-head,.photosec .total,.photosec .legend{text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.photosec .am{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.photosec .areabar{background:transparent}
 .sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;max-width:44em}
 .sec-head p{color:var(--muted)}
 
@@ -234,7 +245,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
 <main id="top">
   <div class="wrap"><div class="demo" id="demo"></div></div>
   <div class="herobg"><div class="wrap hero" id="hero"></div></div>
-  <section id="about"><div class="wrap" id="aboutIn"></div></section>
+  <section id="about" class="photosec"><div class="wrap" id="aboutIn"></div></section>
   <section id="equipment"><div class="wrap" id="eqIn"></div></section>
   <section id="classes"><div class="wrap" id="clsIn"></div></section>
   <section id="team"><div class="wrap" id="teamIn"></div></section>
