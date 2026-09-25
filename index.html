@@ -82,6 +82,8 @@ section{padding-block:56px;border-top:1px solid var(--line)}
 .topphoto .sec-head p,.topphoto .sec-head .eyebrow,.topphoto .col>h3 span{color:#DCE3E8}
 .topphoto .sec-head{margin-bottom:200px}
 @media (max-width:620px){.topphoto .sec-head{margin-bottom:140px}}
+/* columns stack below 900px: the second column title sits far below the photo, so it keeps page colors */
+@media (max-width:900px){.topphoto .col+.col>h3{color:var(--ink);text-shadow:none}.topphoto .col+.col>h3 span{color:var(--muted)}}
 .sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;max-width:44em}
 .sec-head p{color:var(--muted)}
 
