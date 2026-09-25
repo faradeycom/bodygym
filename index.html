@@ -118,6 +118,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .am b{font-family:var(--display);font-weight:800;font-size:32px;line-height:1}
 .am h3{font-size:18px}
 .am p{font-size:14px;color:var(--muted)}
+.am b{overflow-wrap:anywhere}
+.am ul{margin:0;padding-left:18px;font-size:15px;display:flex;flex-direction:column;gap:4px}
 
 /* equipment */
 .eq{display:flex;flex-direction:column}
@@ -268,7 +270,7 @@ const C={
     {v:'Душ',u:{uk:'',ru:''},t:{uk:'Душові кабіни',ru:'Душевые кабины'},d:{uk:'Можна прийняти душ після тренування.',ru:'Можно принять душ после тренировки.'}},
     {v:'Шафки',u:{uk:'',ru:''},t:{uk:'Роздягальня',ru:'Раздевалка'},d:{uk:'Індивідуальні шафки для ваших речей.',ru:'Индивидуальные шкафчики для ваших вещей.'}},
     {v:'Тепло',u:{uk:'',ru:''},t:{uk:'Опалення взимку',ru:'Отопление зимой'},d:{uk:'Комфортні умови для тренування взимку.',ru:'Комфортные условия для тренировок зимой.'}},
-    {v:'Кулер і Wi-Fi',u:{uk:'',ru:''},t:{uk:'Зручності',ru:'Удобства'},d:{uk:'Кулер з холодною й теплою водою та Wi-Fi для відвідувачів.',ru:'Кулер с холодной и тёплой водой и Wi-Fi для посетителей.'}}],
+    {v:{uk:'Зручності',ru:'Удобства'},list:[{uk:'Кулер (тепла та холодна питна вода)',ru:'Кулер (тёплая и холодная питьевая вода)'},'Wi-Fi']}],
   // n — кількість, stat:false — не рахувати в загальну кількість тренажерів
   equip:[
     {n:16,t:{uk:'Силові тренажери',ru:'Силовые тренажёры'},for:{uk:'Силові тренування, жіноча група, реабілітація',ru:'Силовые тренировки, женская группа, реабилитация'},w:{uk:'Блокові та важільні тренажери, жим ногами 45°, машина Сміта, гіперекстензія',ru:'Блочные и рычажные тренажёры, жим ногами 45°, машина Смита, гиперэкстензия'}},
@@ -405,7 +407,7 @@ function render(){
     <div class="areabar" role="img" aria-label="${esc(C.zones.map(z=>tr(z.n)+' '+z.m2+' м²').join(', '))}">${C.zones.map(z=>`<div style="flex:${z.m2};background:var(${z.c})"></div>`).join('')}</div>
     <div class="legend">${C.zones.map(z=>`<div><i style="background:var(${z.c})"></i><span>${esc(tr(z.n))}</span><b>${z.m2} м²</b></div>`).join('')}</div>
    </div>
-   <div class="amen">${C.amen.map(a=>`<div class="am"><b class="num">${esc(a.v)}${tr(a.u)?` <small style="font-size:18px;font-weight:600">${esc(tr(a.u))}</small>`:''}</b><h3>${esc(tr(a.t))}</h3><p>${esc(tr(a.d))}</p></div>`).join('')}</div>`;
+   <div class="amen">${C.amen.map(a=>`<div class="am"><b class="num">${esc(tr(a.v))}${tr(a.u)?` <small style="font-size:18px;font-weight:600">${esc(tr(a.u))}</small>`:''}</b>${tr(a.t)?`<h3>${esc(tr(a.t))}</h3>`:''}${a.list?`<ul>${a.list.map(x=>`<li>${esc(tr(x))}</li>`).join('')}</ul>`:`<p>${esc(tr(a.d))}</p>`}</div>`).join('')}</div>`;
 
   document.getElementById('eqIn').innerHTML=head(l.eqEy,l.eqH,l.eqP)+`
    <div class="eq">${C.equip.map(e=>`<div class="eqrow">
