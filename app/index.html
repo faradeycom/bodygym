@@ -330,8 +330,8 @@ info(){
   <div class="sec"><h3>${t('prices')}</h3><div class="panel"><table class="tbl">${S.plans.map(p=>`<tr><td>${esc(tr(p.name))}</td><td>${p.price} ${t('cur')}</td></tr>`).join('')}</table></div></div>
   <div class="sec"><h3>${t('equip')}</h3><div class="panel">${t('equipT')}</div></div>
   <div class="sec"><h3>${t('contacts')}</h3><div class="panel stack" style="gap:10px">
-    <div class="row"><div style="flex:1"><div class="small muted">${t('phone')}</div><div class="num" style="font-weight:600;user-select:all">+380 00 000 00 00</div></div><button class="btn sm" data-a="copy" data-v="+380 00 000 00 00">${t('copy')}</button></div>
-    <div><div class="small muted">${t('addr')}</div><div style="font-weight:600;user-select:all">вул. Прикладна, 1</div></div>
+    <div class="row"><div style="flex:1"><div class="small muted">${t('phone')}</div><div class="num" style="font-weight:600;user-select:all">+380 96 505 8801</div></div><button class="btn sm" data-a="copy" data-v="+380 96 505 8801">${t('copy')}</button></div>
+    <div><div class="small muted">${t('addr')}</div><div style="font-weight:600;user-select:all">${S.lang==='ru'?'г. Кривой Рог, ул. Павла Глазового, 15':'м. Кривий Ріг, вул. Павла Глазового, 15'}</div></div>
   </div></div>`;
 },
 clients(){

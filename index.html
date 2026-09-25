@@ -77,7 +77,18 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 /* hero */
 .hero{display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:end;padding-block:40px 56px}
 .hero-l{display:flex;flex-direction:column;gap:22px}
-.hero-l h1 em{font-style:normal;color:var(--accent)}
+.hero-l h1 em{font-style:normal;color:#8FB0FF}
+/* hero photo: always dark overlay, so text colors are fixed light in both themes */
+.herobg{margin-top:16px;color:#F2F5F7;background-color:#0E1216;
+  background-image:linear-gradient(90deg,rgba(10,13,17,.92) 0%,rgba(10,13,17,.78) 45%,rgba(10,13,17,.35) 100%),url("img/hero.jpg");
+  background-size:cover;background-position:center 35%}
+.herobg .eyebrow{color:#B9C3CA}
+.herobg .lead{color:#E3E8EC}
+.herobg .btn:not(.primary){background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.35);color:#F2F5F7}
+.herobg .btn.primary{background:#2F63E0;border-color:#2F63E0;color:#fff}
+.herobg .band{background:rgba(14,18,22,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12)}
+.herobg .fact{background:rgba(14,18,22,.6)}
+.herobg .facts{background:rgba(255,255,255,.12)}
 .cta{display:flex;gap:10px;flex-wrap:wrap}
 .band{background:var(--band);color:var(--band-ink);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:18px}
 .band .open{display:flex;align-items:center;gap:10px;font-weight:600}
@@ -191,6 +202,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
 
 @media (max-width:900px){
   .hero{grid-template-columns:1fr}
+  .herobg{background-image:linear-gradient(180deg,rgba(10,13,17,.9) 0%,rgba(10,13,17,.8) 55%,rgba(10,13,17,.6) 100%),url("img/hero.jpg")}
   .amen{grid-template-columns:1fr 1fr}
   .prices{grid-template-columns:1fr}
   .cols,.hc,.find{grid-template-columns:1fr}
@@ -218,7 +230,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
 
 <main id="top">
   <div class="wrap"><div class="demo" id="demo"></div></div>
-  <div class="wrap hero" id="hero"></div>
+  <div class="herobg"><div class="wrap hero" id="hero"></div></div>
   <section id="about"><div class="wrap" id="aboutIn"></div></section>
   <section id="equipment"><div class="wrap" id="eqIn"></div></section>
   <section id="classes"><div class="wrap" id="clsIn"></div></section>
@@ -235,7 +247,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 40px;font-size:13px;c
 /* ===== ДАНІ ЗАЛУ — замініть на реальні ===== */
 const C={
   name:'ЗАЛ',
-  phone:'+380 00 000 00 00',
+  phone:'+380 96 505 8801',
   addr:{uk:'м. Кривий Ріг, вул. Павла Глазового, 15',ru:'г. Кривой Рог, ул. Павла Глазового, 15'},
   // місце на Google Картах (bodygym_kr); placeId веде навігатор саме до залу
   map:{name:'bodygym_kr',q:'вулиця Павла Глазового, 15, Кривий Ріг',placeId:'ChIJ4aCFR_oh20ARs7ieFnvZkIw',lat:47.9348533,lng:33.4138465},
@@ -311,7 +323,7 @@ const C={
 
 /* ===== Тексти інтерфейсу ===== */
 const T={
-uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Дані на сторінці приклад. Замініть ціни, розклад, тренерів і контакти на реальні.',
+uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Ціни, розклад, тренери й обладнання на сторінці поки приклад. Адреса й телефон справжні.',
  nav:{about:'Про зал',equipment:'Обладнання',classes:'Заняття',team:'Команда',prices:'Ціни',contacts:'Контакти',find:'Як нас знайти'},
  fEy:'Як нас знайти',fH:'Кривий Ріг, Павла Глазового, 15',fP:'Натисніть «Прокласти маршрут», і Google Карти поведуть вас прямо до входу в зал.',route:'Прокласти маршрут',openMap:'Відкрити в Google Картах',routeHint:'На телефоні відкриється застосунок Google Карти з маршрутом від вашого місця.',
  heroEy:'Тренажерний зал поруч з домом',heroH:'Зал без черги <em>до тренажерів</em>',heroP:'Невеликий зал з фірмовим обладнанням. Силова зона, пілатес, фітнес і воркаут для дорослих, окремі групи для дітей і підлітків. Тепло взимку, душ і роздягальні.',
@@ -325,7 +337,7 @@ uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Дані на сторінці при
  cEy:'Контакти',cH:'Години роботи',addr:'Адреса',phone:'Телефон',copy:'Копіювати',copied:'Скопійовано',copyFail:'Виділіть номер і скопіюйте вручну',
  appBtn:'Відкрити застосунок',appBtnS:'Застосунок',
  wd:['Понеділок','Вівторок','Середа','Четвер','Пʼятниця','Субота','Неділя'],today:'сьогодні',foot:'Тренажерний зал'},
-ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Данные на странице пример. Замените цены, расписание, тренеров и контакты на реальные.',
+ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Цены, расписание, тренеры и оборудование на странице пока пример. Адрес и телефон настоящие.',
  nav:{about:'О зале',equipment:'Оборудование',classes:'Занятия',team:'Команда',prices:'Цены',contacts:'Контакты',find:'Как нас найти'},
  fEy:'Как нас найти',fH:'Кривой Рог, Павла Глазового, 15',fP:'Нажмите «Проложить маршрут», и Google Карты приведут вас прямо ко входу в зал.',route:'Проложить маршрут',openMap:'Открыть в Google Картах',routeHint:'На телефоне откроется приложение Google Карты с маршрутом от вашего места.',
  heroEy:'Тренажёрный зал рядом с домом',heroH:'Зал без очереди <em>к тренажёрам</em>',heroP:'Небольшой зал с фирменным оборудованием. Силовая зона, пилатес, фитнес и воркаут для взрослых, отдельные группы для детей и подростков. Тепло зимой, душ и раздевалки.',
@@ -422,7 +434,7 @@ function render(){
   document.getElementById('contIn').innerHTML=head(l.cEy,l.cH,'')+`
    <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}</td><td>${h[0]}–${h[1]}</td></tr>`).join('')}</tbody></table></div>
    <div class="contact">
-    <div><div class="lbl">${l.phone}</div><div class="cline"><span class="v num" id="phoneV">${esc(C.phone)}</span><button class="btn sm" data-copy="phoneV">${l.copy}</button></div></div>
+    <div><div class="lbl">${l.phone}</div><div class="cline"><a class="v num" id="phoneV" href="tel:${C.phone.replace(/\s/g,'')}" style="color:inherit;text-decoration:none">${esc(C.phone)}</a><button class="btn sm" data-copy="phoneV">${l.copy}</button></div></div>
     <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span><a class="btn sm" href="#find">${l.nav.find}</a></div></div>
    </div></div>`;
 
