@@ -7,7 +7,7 @@
 :root{
   --bg:#E6EAE9; --surface:#FFFFFF; --surface2:#F2F4F4; --ink:#14181B; --muted:#5A646A; --line:#D1D7D6;
   --accent:#1D53D1; --accent-ink:#FFFFFF; --accent-soft:#E3EAFB;
-  --ok:#23864F; --ok-soft:#E1F2E8; --warn:#B87A00; --warn-soft:#FBF0D6;
+  --ok:#23864F; --ok-soft:#E1F2E8; --warn:#B87A00; --warn-soft:#FBF0D6; --bad:#C23B2E;
   --band:#14181B; --band-ink:#E6EAE9; --band-muted:#9AA4AA; --band-line:#2B3237;
   --z1:#1D53D1; --z2:#5B80DC; --z3:#93AAE6; --z4:#14181B; --z5:#5A646A; --z6:#A3ACB0; --z7:#C9CFCF;
   --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
@@ -18,7 +18,7 @@
     color-scheme:dark;
     --bg:#0D1013; --surface:#161A1E; --surface2:#1D2227; --ink:#E7EBED; --muted:#96A0A6; --line:#2A3137;
     --accent:#6A93FF; --accent-ink:#0A0F1C; --accent-soft:#1A2440;
-    --ok:#4CC282; --ok-soft:#15291E; --warn:#E3AE3A; --warn-soft:#2D2413;
+    --ok:#4CC282; --ok-soft:#15291E; --warn:#E3AE3A; --warn-soft:#2D2413; --bad:#EF7A6D;
     --band:#1D2227; --band-ink:#E7EBED; --band-muted:#96A0A6; --band-line:#343C43;
     --z1:#6A93FF; --z2:#4A6FCC; --z3:#34508F; --z4:#E7EBED; --z5:#96A0A6; --z6:#5E686E; --z7:#3A4248;
   }
@@ -27,7 +27,7 @@
   color-scheme:dark;
   --bg:#0D1013; --surface:#161A1E; --surface2:#1D2227; --ink:#E7EBED; --muted:#96A0A6; --line:#2A3137;
   --accent:#6A93FF; --accent-ink:#0A0F1C; --accent-soft:#1A2440;
-  --ok:#4CC282; --ok-soft:#15291E; --warn:#E3AE3A; --warn-soft:#2D2413;
+  --ok:#4CC282; --ok-soft:#15291E; --warn:#E3AE3A; --warn-soft:#2D2413; --bad:#EF7A6D;
   --band:#1D2227; --band-ink:#E7EBED; --band-muted:#96A0A6; --band-line:#343C43;
   --z1:#6A93FF; --z2:#4A6FCC; --z3:#34508F; --z4:#E7EBED; --z5:#96A0A6; --z6:#5E686E; --z7:#3A4248;
 }
@@ -223,6 +223,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .hours td{padding:10px 0;border-top:1px solid var(--line);font-size:16px}
 .hours td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .hours tr.today td{color:var(--accent);font-weight:700}
+.hours tr.off td{color:var(--bad)}
 .contact{display:flex;flex-direction:column;gap:16px}
 .cline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .cline .v{font-weight:600;font-size:20px;user-select:all}
@@ -288,7 +289,7 @@ const C={
   mapEmbedHosts:['github.io'], // на цих доменах показуємо вбудовану карту; в artifact iframe заборонені
   appUrl:'app/',
   // години: індекс 0 = понеділок
-  hours:[['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00']],
+  hours:[['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],null,null], // Сб, Нд — вихідні
   zones:[
     {m2:160,c:'--z1',n:{uk:'Тренажерна зона',ru:'Тренажёрная зона'}},
     {m2:70, c:'--z2',n:{uk:'Вільні ваги',ru:'Свободные веса'}},
@@ -312,14 +313,14 @@ const C={
   adults:[
     {t:{uk:'Фітнес',ru:'Фитнес'},d:{uk:'Загальна фізична підготовка під музику, для будь-якого рівня.',ru:'Общая физическая подготовка под музыку, для любого уровня.'},when:{uk:'Пн, Ср, Пт · 18:00',ru:'Пн, Ср, Пт · 18:00'},dur:55,tr:'Марія',f:'g'},
     {t:{uk:'Пілатес',ru:'Пилатес'},d:{uk:'Глибокі м’язи, постава, гнучкість. Група до 12 людей.',ru:'Глубокие мышцы, осанка, гибкость. Группа до 12 человек.'},when:{uk:'Вт, Чт · 10:00 і 17:00',ru:'Вт, Чт · 10:00 и 17:00'},dur:55,tr:'Олена',f:'g'},
-    {t:{uk:'Воркаут',ru:'Воркаут'},d:{uk:'Вправи з власною вагою: підтягування, віджимання, бруси.',ru:'Упражнения с собственным весом: подтягивания, отжимания, брусья.'},when:{uk:'Вт, Чт, Сб · 18:00',ru:'Вт, Чт, Сб · 18:00'},dur:60,tr:'Андрій',f:'g'},
+    {t:{uk:'Воркаут',ru:'Воркаут'},d:{uk:'Вправи з власною вагою: підтягування, віджимання, бруси.',ru:'Упражнения с собственным весом: подтягивания, отжимания, брусья.'},when:{uk:'Вт, Чт · 18:00',ru:'Вт, Чт · 18:00'},dur:60,tr:'Андрій',f:'g'},
     {t:{uk:'Функціональний тренінг',ru:'Функциональный тренинг'},d:{uk:'Кругове тренування на витривалість і силу.',ru:'Круговая тренировка на выносливость и силу.'},when:{uk:'Пн, Ср, Пт · 08:00',ru:'Пн, Ср, Пт · 08:00'},dur:50,tr:'Сергій',f:'g'},
     {t:{uk:'Техніка базових вправ',ru:'Техника базовых упражнений'},d:{uk:'Присідання, жим, тяга. Малі групи до 6 людей.',ru:'Приседания, жим, тяга. Малые группы до 6 человек.'},when:{uk:'Вт, Чт · 12:00',ru:'Вт, Чт · 12:00'},dur:60,tr:'Віктор',f:'g'},
-    {t:{uk:'Стретчинг',ru:'Стретчинг'},d:{uk:'Розтяжка та відновлення після силових.',ru:'Растяжка и восстановление после силовых.'},when:{uk:'Сб · 10:00',ru:'Сб · 10:00'},dur:45,tr:'Олена',f:'g'},
+    {t:{uk:'Стретчинг',ru:'Стретчинг'},d:{uk:'Розтяжка та відновлення після силових.',ru:'Растяжка и восстановление после силовых.'},when:{uk:'Ср · 10:00',ru:'Ср · 10:00'},dur:45,tr:'Олена',f:'g'},
     {t:{uk:'Персональні тренування',ru:'Персональные тренировки'},d:{uk:'Програма під вашу ціль, тренер поруч усе заняття.',ru:'Программа под вашу цель, тренер рядом всё занятие.'},when:{uk:'За домовленістю',ru:'По договорённости'},dur:60,tr:null,f:'i'}],
   kids:[
     {t:{uk:'Дитячий фітнес',ru:'Детский фитнес'},age:'6–9',d:{uk:'Ігрова ОФП: координація, спритність, правильна постава.',ru:'Игровая ОФП: координация, ловкость, правильная осанка.'},when:{uk:'Пн, Ср · 16:30',ru:'Пн, Ср · 16:30'},dur:45,tr:'Марія'},
-    {t:{uk:'Дитячий пілатес',ru:'Детский пилатес'},age:'7–12',d:{uk:'Вправи для спини й постави на килимках.',ru:'Упражнения для спины и осанки на ковриках.'},when:{uk:'Сб · 11:00',ru:'Сб · 11:00'},dur:45,tr:'Олена'},
+    {t:{uk:'Дитячий пілатес',ru:'Детский пилатес'},age:'7–12',d:{uk:'Вправи для спини й постави на килимках.',ru:'Упражнения для спины и осанки на ковриках.'},when:{uk:'Пн, Ср · 16:00',ru:'Пн, Ср · 16:00'},dur:45,tr:'Олена'},
     {t:{uk:'Воркаут для підлітків',ru:'Воркаут для подростков'},age:'10–15',d:{uk:'Турніки й бруси, перші підтягування, робота з власною вагою.',ru:'Турники и брусья, первые подтягивания, работа с собственным весом.'},when:{uk:'Вт, Чт · 16:30',ru:'Вт, Чт · 16:30'},dur:60,tr:'Андрій'},
     {t:{uk:'Силова підготовка',ru:'Силовая подготовка'},age:'14–17',d:{uk:'Техніка вправ зі штангою під наглядом тренера, помірні ваги.',ru:'Техника упражнений со штангой под наблюдением тренера, умеренные веса.'},when:{uk:'Пн, Ср, Пт · 17:30',ru:'Пн, Ср, Пт · 17:30'},dur:60,tr:'Віктор'}],
   trainers:[
@@ -361,7 +362,7 @@ uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Ціни, розклад, трене�
  nav:{about:'Про зал',equipment:'Обладнання',classes:'Заняття',team:'Команда',prices:'Ціни',contacts:'Контакти',find:'Як нас знайти'},
  fEy:'Як нас знайти',fH:'Кривий Ріг, Павла Глазового, 15',fP:'Натисніть «Прокласти маршрут», і Google Карти поведуть вас прямо до входу в зал.',route:'Прокласти маршрут',openMap:'Відкрити в Google Картах',routeHint:'На телефоні відкриється застосунок Google Карти з маршрутом від вашого місця.',
  heroEy:'Sport Hub · тренажерний зал у Кривому Розі',heroH:'Зал без черги <em>до тренажерів</em>',heroP:'Невеликий зал з фірмовим обладнанням. Силова зона, пілатес, фітнес і воркаут для дорослих, окремі групи для дітей і підлітків. Тепло взимку, душ і роздягальня.',
- toPrices:'Ціни',toTrial:'Пробне заняття',openNow:'Зараз відчинено, до',closedNow:'Зараз зачинено. Відкриємося о',m2:'м² площі',eq:'тренажерів і станцій',tr:'тренерів',daily:'щодня, години роботи',
+ toPrices:'Ціни',toTrial:'Пробне заняття',openNow:'Зараз відчинено, до',closedNow:'Зараз зачинено. Відкриємося о',m2:'м² площі',eq:'тренажерів і станцій',tr:'тренерів',daily:'пн–пт, години роботи',dayOff:'Вихідний',nextOn:'Відкриємося',tomorrow:'завтра',wdAt:['у понеділок','у вівторок','у середу','у четвер','у пʼятницю','у суботу','у неділю'],
  aboutEy:'Про зал',aboutH:'Площа і зручності',aboutP:'Розподіл площі по зонах, м².',total:'загальна площа',
  eqEy:'Обладнання',eqH:'Що є для кожного типу занять',eqP:'Кількість тренажерів і станцій по зонах.',units:'одиниць',places:'місць',
  qT:'Фірмове обладнання',qP:'Усі тренажери фірмові, від перевірених виробників. Ми регулярно їх обслуговуємо, тож усе справне й безпечне.',
@@ -375,7 +376,7 @@ ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Цены, расписание, т�
  nav:{about:'О зале',equipment:'Оборудование',classes:'Занятия',team:'Команда',prices:'Цены',contacts:'Контакты',find:'Как нас найти'},
  fEy:'Как нас найти',fH:'Кривой Рог, Павла Глазового, 15',fP:'Нажмите «Проложить маршрут», и Google Карты приведут вас прямо ко входу в зал.',route:'Проложить маршрут',openMap:'Открыть в Google Картах',routeHint:'На телефоне откроется приложение Google Карты с маршрутом от вашего места.',
  heroEy:'Sport Hub · тренажёрный зал в Кривом Роге',heroH:'Зал без очереди <em>к тренажёрам</em>',heroP:'Небольшой зал с фирменным оборудованием. Силовая зона, пилатес, фитнес и воркаут для взрослых, отдельные группы для детей и подростков. Тепло зимой, душ и раздевалка.',
- toPrices:'Цены',toTrial:'Пробное занятие',openNow:'Сейчас открыто, до',closedNow:'Сейчас закрыто. Откроемся в',m2:'м² площади',eq:'тренажёров и станций',tr:'тренеров',daily:'ежедневно, часы работы',
+ toPrices:'Цены',toTrial:'Пробное занятие',openNow:'Сейчас открыто, до',closedNow:'Сейчас закрыто. Откроемся в',m2:'м² площади',eq:'тренажёров и станций',tr:'тренеров',daily:'пн–пт, часы работы',dayOff:'Выходной',nextOn:'Откроемся',tomorrow:'завтра',wdAt:['в понедельник','во вторник','в среду','в четверг','в пятницу','в субботу','в воскресенье'],
  aboutEy:'О зале',aboutH:'Площадь и удобства',aboutP:'Распределение площади по зонам, м².',total:'общая площадь',
  eqEy:'Оборудование',eqH:'Что есть для каждого типа занятий',eqP:'Количество тренажёров и станций по зонам.',units:'единиц',places:'мест',
  qT:'Фирменное оборудование',qP:'Все тренажёры фирменные, от проверенных производителей. Мы регулярно их обслуживаем, поэтому всё исправно и безопасно.',
@@ -415,10 +416,12 @@ const toMin=s=>{const [h,m]=s.split(':').map(Number);return h*60+m;};
 
 function openState(){
   const now=new Date(),d=(now.getDay()+6)%7,m=now.getHours()*60+now.getMinutes();
-  const [o,c]=C.hours[d];
-  if(m>=toMin(o)&&m<toMin(c))return{open:true,txt:`${L().openNow} ${c}`};
-  const next=m<toMin(o)?o:C.hours[(d+1)%7][0];
-  return{open:false,txt:`${L().closedNow} ${next}`};
+  const h=C.hours[d];
+  if(h&&m>=toMin(h[0])&&m<toMin(h[1]))return{open:true,txt:`${L().openNow} ${h[1]}`};
+  if(h&&m<toMin(h[0]))return{open:false,txt:`${L().closedNow} ${h[0]}`};
+  // next working day (Sat/Sun and after closing time)
+  for(let i=1;i<=7;i++){const n=(d+i)%7;if(C.hours[n])return{open:false,txt:`${L().closedNow.replace(/\.[^.]*$/,'.')} ${L().nextOn} ${i===1?L().tomorrow:L().wdAt[n]} ${L().loc.startsWith('ru')?'в':'о'} ${C.hours[n][0]}`};}
+  return{open:false,txt:L().closedNow};
 }
 
 function render(){
@@ -441,7 +444,7 @@ function render(){
      <div class="fact"><b class="num">${area}</b><span>${l.m2}</span></div>
      <div class="fact"><b class="num">${eqN}</b><span>${l.eq}</span></div>
      <div class="fact"><b class="num">${C.trainers.length}</b><span>${l.tr}</span></div>
-     <div class="fact"><b class="num">${+C.hours[0][0].slice(0,2)}–${+C.hours[0][1].slice(0,2)}</b><span>${l.daily}</span></div>
+     <div class="fact"><b class="num">${+C.hours.find(Boolean)[0].slice(0,2)}–${+C.hours.find(Boolean)[1].slice(0,2)}</b><span>${l.daily}</span></div>
     </div>
     ${plates(eqN)}
    </div>`;
@@ -480,7 +483,7 @@ function render(){
 
   const td=(new Date().getDay()+6)%7;
   document.getElementById('contIn').innerHTML=head(l.cEy,l.cH,'')+`
-   <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}</td><td>${h[0]}–${h[1]}</td></tr>`).join('')}</tbody></table></div>
+   <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''} ${h?'':'off'}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}</td><td>${h?h[0]+'–'+h[1]:l.dayOff}</td></tr>`).join('')}</tbody></table></div>
    <div class="contact">
     <div><div class="lbl">${l.phone}</div><div class="cline"><a class="v num" id="phoneV" href="tel:${C.phone.replace(/\s/g,'')}" style="color:inherit;text-decoration:none">${esc(C.phone)}</a><button class="btn sm" data-copy="phoneV">${l.copy}</button></div></div>
     <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span><a class="btn sm" href="#find">${l.nav.find}</a></div></div>
