@@ -1,1 +1,0 @@
-import{b as e,c as t,tt as n}from"./runtime-core.esm-bundler-T3ZtwtpW.js";import{t as r}from"./_plugin-vue_export-helper-BDNMzG2s.js";var i={},a={class:`muted`};function o(r,i){return e(),t(`p`,a,n(r.$t(`app.loading`)),1)}var s=r(i,[[`render`,o]]);export{s as default};
