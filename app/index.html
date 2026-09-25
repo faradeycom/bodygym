@@ -78,6 +78,16 @@ label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mu
 .code{display:flex;align-items:center;gap:14px}
 .bars{display:flex;height:44px;gap:2px;align-items:stretch;flex:none}
 .bars i{display:block;background:var(--ink)}
+.qrbtn{flex:none;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;cursor:zoom-in;line-height:0}
+.qrbtn svg{width:112px;height:112px;display:block}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(10,13,17,.94);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.ov.light{background:#fff}
+.ovin{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:420px;color:#F2F5F7;text-align:center}
+.ov.light .ovin{color:#14181B}
+.ov .btn{background:transparent;color:inherit;border-color:currentColor}
+#scanVid{width:100%;max-width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#000}
+#scanMsg{margin:0;font-size:14px;min-height:2.9em}
+#qrBig svg{width:min(80vw,340px);height:auto;display:block}
 .memno{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:.06em}
 
 /* list items */
@@ -143,6 +153,10 @@ nav.tabs button.on{color:var(--accent)}
 </div>
 <nav class="tabs"><div class="in" id="tabs"></div></nav>
 <div class="toast" id="toast" hidden></div>
+<div class="ov" id="scanOv" hidden><div class="ovin"><strong id="scanTitle"></strong><video id="scanVid" playsinline muted></video><p id="scanMsg"></p><button class="btn" data-a="closescan" id="scanClose"></button></div></div>
+<div class="ov light" id="qrOv" hidden><div class="ovin"><div id="qrBig"></div><div class="memno num" id="qrNo"></div><button class="btn" data-a="closeqr" id="qrClose"></button></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
 <script>
 (function(){
@@ -156,6 +170,7 @@ book:'Записатися',cancel:'Скасувати',booked:'Ви запис�
 progress:'Прогрес',bestW:'Найкраща вага',addW:'Нове тренування',ex:'Вправа',sets:'Підх.',reps:'Повт.',kg:'кг',addEx:'+ вправа',save:'Зберегти',savedW:'Тренування збережено',history:'Історія',noW:'Записів ще немає.',noData:'Для графіка потрібно хоча б 2 тренування з цією вправою.',
 hours:'Години роботи',hoursV:[['Пн–Нд','8:00–19:00']],prices:'Ціни',equip:'Обладнання',equipT:'Усі тренажери фірмові, від перевірених виробників. Ми регулярно їх обслуговуємо, тож усе справне й безпечне.',contacts:'Контакти',addr:'Адреса',phone:'Телефон',copy:'Копіювати',copied:'Скопійовано',example:'приклад, замініть на свої дані',
 search:'Пошук за ім’ям або телефоном',statActive:'активні',statLow:'закінчуються',statExp:'прострочені',statToday:'візитів сьогодні',visit:'Візит',visitT:'Візит відмічено',already:'Вже відмічено сьогодні',sell:'Продати',sellT:'Абонемент оформлено',newClient:'Новий клієнт',name:'Ім’я',add:'Додати',addedC:'Клієнта додано',noLeft:'Немає занять',
+qrHint:'Покажіть QR-код адміністратору на вході',tapQr:'Натисніть на код, щоб збільшити',close:'Закрити',entry:'Вхід клієнта',scan:'Сканувати QR',scanHint:'Наведіть камеру на QR-код клієнта',camErr:'Камера недоступна. Дозвольте доступ до камери або введіть номер клієнта вручну.',notOurs:'Це не QR-код клієнта Body Gym',manual:'№ клієнта',checkin:'Відмітити візит',notFound:'Клієнта з таким номером немає',expiredT:'абонемент закінчився',
 bookedList:'Записані',nobody:'Поки ніхто.',newClass:'Нове заняття',title:'Назва',time:'Час',dur:'Тривалість, хв',trainer:'Тренер',cap:'Місць',days:'Дні',addedK:'Заняття додано',del:'Видалити',confirm:'Підтвердити?',deleted:'Видалено',
 newNews:'Нова новина',text:'Текст',publish:'Опублікувати',published:'Опубліковано',fillAll:'Заповніть усі поля',
 wd:['Пн','Вт','Ср','Чт','Пт','Сб','Нд'],today:'Сьогодні',loc:'uk-UA',cur:'₴'},
@@ -167,6 +182,7 @@ book:'Записаться',cancel:'Отменить',booked:'Вы записа�
 progress:'Прогресс',bestW:'Лучший вес',addW:'Новая тренировка',ex:'Упражнение',sets:'Подх.',reps:'Повт.',kg:'кг',addEx:'+ упражнение',save:'Сохранить',savedW:'Тренировка сохранена',history:'История',noW:'Записей пока нет.',noData:'Для графика нужно хотя бы 2 тренировки с этим упражнением.',
 hours:'Часы работы',hoursV:[['Пн–Вс','8:00–19:00']],prices:'Цены',equip:'Оборудование',equipT:'Все тренажёры фирменные, от проверенных производителей. Мы регулярно их обслуживаем, поэтому всё исправно и безопасно.',contacts:'Контакты',addr:'Адрес',phone:'Телефон',copy:'Копировать',copied:'Скопировано',example:'пример, замените на свои данные',
 search:'Поиск по имени или телефону',statActive:'активные',statLow:'заканчиваются',statExp:'просрочены',statToday:'визитов сегодня',visit:'Визит',visitT:'Визит отмечен',already:'Уже отмечен сегодня',sell:'Продать',sellT:'Абонемент оформлен',newClient:'Новый клиент',name:'Имя',add:'Добавить',addedC:'Клиент добавлен',noLeft:'Нет занятий',
+qrHint:'Покажите QR-код администратору на входе',tapQr:'Нажмите на код, чтобы увеличить',close:'Закрыть',entry:'Вход клиента',scan:'Сканировать QR',scanHint:'Наведите камеру на QR-код клиента',camErr:'Камера недоступна. Разрешите доступ к камере или введите номер клиента вручную.',notOurs:'Это не QR-код клиента Body Gym',manual:'№ клиента',checkin:'Отметить визит',notFound:'Клиента с таким номером нет',expiredT:'абонемент закончился',
 bookedList:'Записаны',nobody:'Пока никто.',newClass:'Новое занятие',title:'Название',time:'Время',dur:'Длительность, мин',trainer:'Тренер',cap:'Мест',days:'Дни',addedK:'Занятие добавлено',del:'Удалить',confirm:'Подтвердить?',deleted:'Удалено',
 newNews:'Новая новость',text:'Текст',publish:'Опубликовать',published:'Опубликовано',fillAll:'Заполните все поля',
 wd:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],today:'Сегодня',loc:'ru-UA',cur:'₴'}
@@ -293,7 +309,7 @@ home(){
     ${plates?`<div class="plates" aria-hidden="true">${plates}</div>`:''}
     <div class="meta"><span>${t('until')} <b>${fmt(c.until)}</b></span><span class="num">${dl>=0?dl+' '+t('daysLeft'):t('expired')}</span></div>
   </div>
-  <div class="panel code"><div class="bars" aria-hidden="true">${bars}</div><div><div class="small muted">${t('memno')}</div><div class="memno num">№ ${String(c.no).padStart(4,'0')}</div><div class="small muted">${t('showDesk')}</div></div></div>
+  <div class="panel code">${window.qrcode?`<button class="qrbtn" data-a="bigqr" aria-label="${t('tapQr')}">${qrSvg(qrText(c))}</button>`:`<div class="bars" aria-hidden="true">${bars}</div>`}<div><div class="small muted">${t('memno')}</div><div class="memno num">№ ${String(c.no).padStart(4,'0')}</div><div class="small muted">${window.qrcode?t('qrHint'):t('showDesk')}</div>${window.qrcode?`<div class="small muted" style="margin-top:4px">${t('tapQr')}</div>`:''}</div></div>
   <div class="sec"><h3>${t('myBook')}</h3><div class="panel">${mine.length?mine.map(m=>`<div class="item"><div class="t">${m.cl.time}</div><div class="body"><b>${esc(tr(m.cl.title))}</b><span class="small muted">${fmtW(m.k)} · ${esc(m.cl.trainer)}</span></div><button class="btn sm ghost" data-a="unbook" data-k="${m.cl.id}" data-d="${m.k}">${t('cancel')}</button></div>`).join(''):`<div class="empty">${t('noBook')}</div><button class="btn sm" data-tab="schedule">${t('toSchedule')}</button>`}</div></div>
   <div class="sec"><h3>${t('news')}</h3><div class="panel">${S.news.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3).map(n=>`<div class="item news"><div class="body"><span class="small muted">${fmt(n.date)}</span><b>${esc(tr(n.title))}</b><p>${esc(tr(n.text))}</p></div></div>`).join('')}</div></div>
   <div class="sec"><h3>${t('visits')}</h3><div class="panel">${c.visits.length?`<div class="chips">${c.visits.slice(0,8).map(v=>`<span class="pill acc">${fmtW(v)}</span>`).join('')}</div>`:`<div class="empty">${t('noVisits')}</div>`}</div></div>`;
@@ -339,6 +355,9 @@ clients(){
   const n={ok:0,warn:0,bad:0};cs.forEach(c=>n[status(c)]++);
   const today=cs.filter(c=>c.visits.includes(TD)).length;
   return `<div class="sec"><h2>${t('clients')}</h2></div>
+  <div class="panel stack" style="gap:10px"><strong>${t('entry')}</strong>
+    <button class="btn primary" data-a="scan">${t('scan')}</button>
+    <div class="row"><input id="manNo" type="number" inputmode="numeric" min="1" placeholder="${t('manual')}"><button class="btn" data-a="mancheck">${t('checkin')}</button></div></div>
   <div class="stats"><div class="stat"><b style="color:var(--ok)">${n.ok}</b><span>${t('statActive')}</span></div><div class="stat"><b style="color:var(--warn)">${n.warn}</b><span>${t('statLow')}</span></div><div class="stat"><b style="color:var(--bad)">${n.bad}</b><span>${t('statExp')}</span></div><div class="stat"><b>${today}</b><span>${t('statToday')}</span></div></div>
   <input id="q" type="search" placeholder="${t('search')}" value="${esc(ui.q)}">
   <div class="panel" id="clist"></div>
@@ -405,6 +424,51 @@ function chart(ws){
   <text class="axis" x="${L}" y="${H-6}">${fmt(first.d)}</text><text class="axis" x="${W-R}" y="${H-6}" text-anchor="end">${fmt(last.d)}</text></svg>`;
 }
 
+// QR: the client code carries only the club prefix and client number (demo). A real app should use a signed, short-lived token.
+const qrText=c=>'BODYGYM:'+c.no;
+function qrSvg(txt){
+  if(!window.qrcode)return'';
+  const q=qrcode(0,'M');q.addData(txt);q.make();
+  const n=q.getModuleCount(),m=2;let d='';
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))d+=`M${c+m} ${r+m}h1v1h-1z`;
+  return `<svg viewBox="0 0 ${n+2*m} ${n+2*m}" shape-rendering="crispEdges" role="img" aria-label="QR"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
+}
+function checkin(no){
+  const c=S.clients.find(x=>x.no===+no);
+  if(!c){toast(t('notFound'));return false;}
+  if(c.visits.includes(TD)){toast(c.name+': '+t('already'));return true;}
+  if(status(c)==='bad'){toast(c.name+': '+t('expiredT'));return true;}
+  c.visits.unshift(TD);if(c.left!=null)c.left--;save();toast(c.name+': '+t('visitT'));return true;
+}
+const scan={stream:null,raf:0,det:null};
+async function openScanner(){
+  const msg=document.getElementById('scanMsg'),v=document.getElementById('scanVid');
+  document.getElementById('scanTitle').textContent=t('scan');
+  document.getElementById('scanClose').textContent=t('close');
+  msg.textContent=t('scanHint');document.getElementById('scanOv').hidden=false;
+  try{scan.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});}
+  catch(e){msg.textContent=t('camErr');return;}
+  v.srcObject=scan.stream;await v.play().catch(()=>{});
+  scan.det=null;if('BarcodeDetector' in window){try{scan.det=new BarcodeDetector({formats:['qr_code']});}catch(e){}}
+  const cv=document.createElement('canvas'),cx=cv.getContext('2d',{willReadFrequently:true});
+  const tick=async()=>{
+    if(!scan.stream)return;
+    let txt=null;
+    if(v.readyState>=2){try{
+      if(scan.det){const r=await scan.det.detect(v);if(r[0])txt=r[0].rawValue;}
+      else if(window.jsQR){const k=Math.min(1,640/v.videoWidth);cv.width=Math.round(v.videoWidth*k);cv.height=Math.round(v.videoHeight*k);cx.drawImage(v,0,0,cv.width,cv.height);const d=cx.getImageData(0,0,cv.width,cv.height);const r=jsQR(d.data,d.width,d.height,{inversionAttempts:'dontInvert'});if(r)txt=r.data;}
+    }catch(e){}}
+    if(txt){const m=/^BODYGYM:(\d+)$/.exec(txt.trim());if(m){closeScanner();if(checkin(m[1]))render();return;}msg.textContent=t('notOurs');}
+    scan.raf=requestAnimationFrame(tick);
+  };
+  tick();
+}
+function closeScanner(){
+  cancelAnimationFrame(scan.raf);
+  if(scan.stream){scan.stream.getTracks().forEach(tr=>tr.stop());scan.stream=null;}
+  document.getElementById('scanOv').hidden=true;
+}
+
 function syncRows(){ui.rows.forEach((r,i)=>{['ex','sets','reps','w'].forEach(f=>{const el=document.getElementById('r'+i+f);if(el)r[f]=el.value;});});}
 const val=id=>(document.getElementById(id)?.value||'').trim();
 
@@ -429,6 +493,11 @@ document.addEventListener('click',e=>{
     if(ex)ex.items.push(...items);else S.workouts.push({id:uid(),client:S.me,date:TD,items});
     ui.exSel=items[0].ex;ui.rows=[{ex:'squat',sets:5,reps:5,w:''}];save();toast(t('savedW'));break;}
   case'copy': try{navigator.clipboard.writeText(b.dataset.v).then(()=>toast(t('copied')),()=>{});}catch(err){} return;
+  case'bigqr':{const c=client(S.me);document.getElementById('qrBig').innerHTML=qrSvg(qrText(c));document.getElementById('qrNo').textContent='№ '+String(c.no).padStart(4,'0');document.getElementById('qrClose').textContent=t('close');document.getElementById('qrOv').hidden=false;return;}
+  case'closeqr': document.getElementById('qrOv').hidden=true;return;
+  case'scan': openScanner();return;
+  case'closescan': closeScanner();return;
+  case'mancheck': if(!checkin(val('manNo')))return;break;
   case'visit':{const c=client(b.dataset.k);if(c.visits.includes(TD))return;c.visits.unshift(TD);if(c.left!=null)c.left--;save();toast(t('visitT'));break;}
   case'sell':{const c=client(b.dataset.k),p=plan(document.getElementById('sp_'+c.id).value);c.plan=p.id;c.left=p.visits;c.until=iso(addDays(TODAY,p.days));save();toast(t('sellT'));break;}
   case'addclient':{const n=val('ncName'),ph=val('ncPhone'),p=plan(val('ncPlan'));if(!n||!ph){toast(t('fillAll'));return;}
