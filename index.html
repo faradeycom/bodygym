@@ -226,6 +226,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .hours td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .hours tr.today td{color:var(--accent);font-weight:700}
 .hours tr.off td{color:var(--bad)}
+.hours tr.tronly small{display:block;font-size:13px;font-weight:400;color:var(--muted)}
 .contact{display:flex;flex-direction:column;gap:16px}
 .cline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .cline .v{font-weight:600;font-size:20px;user-select:all}
@@ -291,7 +292,8 @@ const C={
   mapEmbedHosts:['github.io'], // на цих доменах показуємо вбудовану карту; в artifact iframe заборонені
   appUrl:'app/',
   // години: індекс 0 = понеділок
-  hours:[['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],null,null], // Сб, Нд — вихідні
+  hours:[['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],['08:00','19:00'],null,null], // Сб, Нд — зал зачинено
+  trainHours:[null,null,null,null,null,['08:00','19:00'],null], // Сб — лише персональні та групові за записом
   zones:[
     {m2:160,c:'--z1',n:{uk:'Тренажерна зона',ru:'Тренажёрная зона'}},
     {m2:70, c:'--z2',n:{uk:'Вільні ваги',ru:'Свободные веса'}},
@@ -364,7 +366,7 @@ uk:{loc:'uk-UA',cur:'₴',min:'хв',demo:'Ціни, розклад, трене�
  nav:{about:'Про зал',equipment:'Обладнання',classes:'Заняття',team:'Команда',prices:'Ціни',contacts:'Контакти',find:'Як нас знайти'},
  fEy:'Як нас знайти',fH:'Кривий Ріг, Павла Глазового, 15',fP:'Натисніть «Прокласти маршрут», і Google Карти поведуть вас прямо до входу в зал.',route:'Прокласти маршрут',openMap:'Відкрити в Google Картах',routeHint:'На телефоні відкриється застосунок Google Карти з маршрутом від вашого місця.',
  heroEy:'Sport Hub · тренажерний зал у Кривому Розі',heroH:'Зал без черги <em>до тренажерів</em>',heroP:'Невеликий зал з фірмовим обладнанням. Силова зона, пілатес, фітнес і воркаут для дорослих, окремі групи для дітей і підлітків. Тепло взимку, душ і роздягальня.',
- toPrices:'Ціни',toTrial:'Пробне заняття',openNow:'Зараз відчинено, до',closedNow:'Зараз зачинено. Відкриємося о',m2:'м² площі',eq:'тренажерів і станцій',tr:'тренерів',daily:'пн–пт, години роботи',dayOff:'Вихідний',nextOn:'Відкриємося',tomorrow:'завтра',wdAt:['у понеділок','у вівторок','у середу','у четвер','у пʼятницю','у суботу','у неділю'],
+ toPrices:'Ціни',toTrial:'Пробне заняття',openNow:'Зараз відчинено, до',closedNow:'Зараз зачинено. Відкриємося о',m2:'м² площі',eq:'тренажерів і станцій',tr:'тренерів',daily:'пн–пт, години роботи',dayOff:'Вихідний',trainOnly:'лише персональні та групові за записом',nextOn:'Відкриємося',tomorrow:'завтра',wdAt:['у понеділок','у вівторок','у середу','у четвер','у пʼятницю','у суботу','у неділю'],
  aboutEy:'Про зал',aboutH:'Площа і зручності',aboutP:'Розподіл площі по зонах, м².',total:'загальна площа',
  eqEy:'Обладнання',eqH:'Що є для кожного типу занять',eqP:'Кількість тренажерів і станцій по зонах.',units:'одиниць',places:'місць',
  qT:'Фірмове обладнання',qP:'Усі тренажери фірмові, від перевірених виробників. Ми регулярно їх обслуговуємо, тож усе справне й безпечне.',
@@ -378,7 +380,7 @@ ru:{loc:'ru-UA',cur:'₴',min:'мин',demo:'Цены, расписание, т�
  nav:{about:'О зале',equipment:'Оборудование',classes:'Занятия',team:'Команда',prices:'Цены',contacts:'Контакты',find:'Как нас найти'},
  fEy:'Как нас найти',fH:'Кривой Рог, Павла Глазового, 15',fP:'Нажмите «Проложить маршрут», и Google Карты приведут вас прямо ко входу в зал.',route:'Проложить маршрут',openMap:'Открыть в Google Картах',routeHint:'На телефоне откроется приложение Google Карты с маршрутом от вашего места.',
  heroEy:'Sport Hub · тренажёрный зал в Кривом Роге',heroH:'Зал без очереди <em>к тренажёрам</em>',heroP:'Небольшой зал с фирменным оборудованием. Силовая зона, пилатес, фитнес и воркаут для взрослых, отдельные группы для детей и подростков. Тепло зимой, душ и раздевалка.',
- toPrices:'Цены',toTrial:'Пробное занятие',openNow:'Сейчас открыто, до',closedNow:'Сейчас закрыто. Откроемся в',m2:'м² площади',eq:'тренажёров и станций',tr:'тренеров',daily:'пн–пт, часы работы',dayOff:'Выходной',nextOn:'Откроемся',tomorrow:'завтра',wdAt:['в понедельник','во вторник','в среду','в четверг','в пятницу','в субботу','в воскресенье'],
+ toPrices:'Цены',toTrial:'Пробное занятие',openNow:'Сейчас открыто, до',closedNow:'Сейчас закрыто. Откроемся в',m2:'м² площади',eq:'тренажёров и станций',tr:'тренеров',daily:'пн–пт, часы работы',dayOff:'Выходной',trainOnly:'только персональные и групповые по записи',nextOn:'Откроемся',tomorrow:'завтра',wdAt:['в понедельник','во вторник','в среду','в четверг','в пятницу','в субботу','в воскресенье'],
  aboutEy:'О зале',aboutH:'Площадь и удобства',aboutP:'Распределение площади по зонам, м².',total:'общая площадь',
  eqEy:'Оборудование',eqH:'Что есть для каждого типа занятий',eqP:'Количество тренажёров и станций по зонам.',units:'единиц',places:'мест',
  qT:'Фирменное оборудование',qP:'Все тренажёры фирменные, от проверенных производителей. Мы регулярно их обслуживаем, поэтому всё исправно и безопасно.',
@@ -485,7 +487,7 @@ function render(){
 
   const td=(new Date().getDay()+6)%7;
   document.getElementById('contIn').innerHTML=head(l.cEy,l.cH,'')+`
-   <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''} ${h?'':'off'}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}</td><td>${h?h[0]+'–'+h[1]:l.dayOff}</td></tr>`).join('')}</tbody></table></div>
+   <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''} ${h||C.trainHours[i]?'':'off'} ${!h&&C.trainHours[i]?'tronly':''}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}${!h&&C.trainHours[i]?`<small>${l.trainOnly}</small>`:''}</td><td>${h?h[0]+'–'+h[1]:C.trainHours[i]?C.trainHours[i][0]+'–'+C.trainHours[i][1]:l.dayOff}</td></tr>`).join('')}</tbody></table></div>
    <div class="contact">
     <div><div class="lbl">${l.phone}</div><div class="cline"><a class="v num" id="phoneV" href="tel:${C.phone.replace(/[^\d+]/g,'')}" style="color:inherit;text-decoration:none">${esc(C.phone)}</a><button class="btn sm" data-copy="phoneV">${l.copy}</button></div></div>
     <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span><a class="btn sm" href="#find">${l.nav.find}</a></div></div>
@@ -557,6 +559,8 @@ function applyPlans(list){
 // working hours: one value for the whole project (settings.data.hours, edited in the app)
 const okHours=h=>Array.isArray(h)&&h.length===7&&h.every(x=>x===null||(Array.isArray(x)&&x.length===2&&x.every(v=>/^\d{2}:\d{2}$/.test(v))))&&h.some(Boolean);
 function applyHours(h){if(!okHours(h))return false;C.hours=h;return true;}
+const okTrain=h=>Array.isArray(h)&&h.length===7&&h.every(x=>x===null||(Array.isArray(x)&&x.length===2&&x.every(v=>/^\d{2}:\d{2}$/.test(v))));
+function applyTrain(h){if(!okTrain(h))return false;C.trainHours=h;return true;}
 // trainers and administration: staff marked «На сайті» in the app (view site_staff)
 function applyStaff(list){
   if(!Array.isArray(list)||!list.length)return false;
@@ -569,6 +573,7 @@ function applyStaff(list){
 }
 const SRC=[['sporthub-site',applySite,'site_content?id=eq.1&select=data',r=>r[0]&&r[0].data&&Object.keys(r[0].data).length?r[0].data:null],
            ['sporthub-hours',applyHours,'settings?id=eq.1&select=hours:data->hours',r=>r[0]&&r[0].hours],
+           ['sporthub-train-hours',applyTrain,'settings?id=eq.1&select=th:data->train_hours',r=>r[0]&&r[0].th],
            ['sporthub-plans',applyPlans,'site_plans?select=name_uk,name_ru,price,visits,days,sort&order=sort',r=>r&&r.length?r:null],
            ['sporthub-staff',applyStaff,'site_staff?select=name,roles,pos_uk,pos_ru,spec_uk,spec_ru,years,photo_url,bio_uk,bio_ru&order=name',r=>r&&r.length?r:null]];
 for(const [k,fn] of SRC){try{const c=JSON.parse(localStorage.getItem(k)||'null');if(c)fn(c);}catch(e){}}
