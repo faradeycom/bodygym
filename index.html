@@ -50,6 +50,7 @@ nav.links a:hover{color:var(--ink);background:var(--surface2)}
 .seg{display:inline-flex;flex:none;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
 .seg button{border:0;background:transparent;color:var(--muted);font:600 12px var(--body);padding:6px 9px;cursor:pointer;letter-spacing:.04em}
 .seg button.on{background:var(--ink);color:var(--bg)}
+[hidden]{display:none!important}
 .demo{font-size:13px;color:var(--muted);background:var(--surface2);border:1px dashed var(--line);border-radius:8px;padding:8px 12px;margin-top:16px}
 
 /* type */
@@ -430,7 +431,7 @@ function render(){
   const ab=document.getElementById('appBtn');ab.href=C.appUrl;ab.innerHTML=`<span class="lg">${l.appBtn}</span><span class="sh">${l.appBtnS}</span>`;
   document.querySelectorAll('#langSeg button').forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
   document.getElementById('nav').innerHTML=Object.entries(l.nav).map(([k,v])=>`<a href="#${k}">${v}</a>`).join('');
-  document.getElementById('demo').textContent=l.demo;
+  const demo=document.getElementById('demo');demo.textContent=l.demo;demo.hidden=!!C.real;
 
   const area=C.zones.reduce((s,z)=>s+z.m2,0);
   const eqN=C.equip.filter(e=>e.stat!==false).reduce((s,e)=>s+e.n,0);
@@ -464,9 +465,9 @@ function render(){
      <div class="viz">${plates(e.n)}<div class="what">${esc(tr(e.w))}</div></div></div>`).join('')}</div>
    <div class="quality"><h3>${l.qT}</h3><p class="muted" style="margin-top:6px;max-width:48em">${l.qP}</p></div>`;
 
-  const cls=(c,kid)=>`<div class="cls"><h3>${esc(tr(c.t))}</h3>${kid?`<span class="pill warn num">${c.age} ${l.age}</span>`:`<span class="pill ${c.f==='i'?'ok':''}">${c.f==='i'?l.indiv:l.group}</span>`}
+  const cls=(c,kid)=>`<div class="cls"><h3>${esc(tr(c.t))}</h3>${kid?`${c.age?`<span class="pill warn num">${esc(c.age)} ${l.age}</span>`:''}`:`<span class="pill ${c.f==='i'?'ok':''}">${c.f==='i'?l.indiv:l.group}</span>`}
     <p class="desc">${esc(tr(c.d))}</p>
-    <div class="meta"><span class="num"><b>${esc(tr(c.when))}</b></span><span class="muted num">${c.dur} ${l.min}</span>${c.tr?`<span class="muted">${l.trainer}: ${trIdx(c.tr)>=0?`<a class="trlink" href="#tr-${trIdx(c.tr)}">${esc(nm(c.tr))}</a>`:esc(nm(c.tr))}</span>`:''}</div></div>`;
+    <div class="meta"><span class="num"><b>${esc(tr(c.when))}</b></span>${c.dur?`<span class="muted num">${c.dur} ${l.min}</span>`:''}${c.tr?`<span class="muted">${l.trainer}: ${trIdx(c.tr)>=0?`<a class="trlink" href="#tr-${trIdx(c.tr)}">${esc(nm(c.tr))}</a>`:esc(nm(c.tr))}</span>`:''}</div></div>`;
   document.getElementById('clsIn').innerHTML=head(l.clsEy,l.clsH,l.clsP)+`
    <div class="cols"><div class="col"><h3>${l.adults}</h3>${C.adults.map(c=>cls(c,false)).join('')}</div>
    <div class="col"><h3>${l.kids}</h3>${C.kids.map(c=>cls(c,true)).join('')}</div></div>`;
@@ -485,9 +486,9 @@ function render(){
   document.getElementById('contIn').innerHTML=head(l.cEy,l.cH,'')+`
    <div class="hc"><div><table class="hours"><tbody>${C.hours.map((h,i)=>`<tr class="${i===td?'today':''} ${h?'':'off'}"><td>${l.wd[i]}${i===td?` · ${l.today}`:''}</td><td>${h?h[0]+'–'+h[1]:l.dayOff}</td></tr>`).join('')}</tbody></table></div>
    <div class="contact">
-    <div><div class="lbl">${l.phone}</div><div class="cline"><a class="v num" id="phoneV" href="tel:${C.phone.replace(/\s/g,'')}" style="color:inherit;text-decoration:none">${esc(C.phone)}</a><button class="btn sm" data-copy="phoneV">${l.copy}</button></div></div>
+    <div><div class="lbl">${l.phone}</div><div class="cline"><a class="v num" id="phoneV" href="tel:${C.phone.replace(/[^\d+]/g,'')}" style="color:inherit;text-decoration:none">${esc(C.phone)}</a><button class="btn sm" data-copy="phoneV">${l.copy}</button></div></div>
     <div><div class="lbl">${l.addr}</div><div class="cline"><span class="v">${esc(tr(C.addr))}</span><a class="btn sm" href="#find">${l.nav.find}</a></div></div>
-    <div><div class="lbl">Instagram</div><div class="cline"><a class="v" href="https://www.instagram.com/${C.instagram}/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">@${esc(C.instagram)}</a></div></div>
+    <div><div class="lbl">Instagram</div><div class="cline"><a class="v" href="https://www.instagram.com/${encodeURIComponent(C.instagram)}/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">@${esc(C.instagram)}</a></div></div>
    </div></div>`;
 
   const m=C.map,q=encodeURIComponent,pid=q(m.placeId);
@@ -523,6 +524,31 @@ document.addEventListener('click',e=>{
     try{navigator.clipboard.writeText(el.textContent.trim()).then(()=>toast(L().copied),sel);}catch(err){sel();}
   }
 });
+/* ===== Зміст, який власник редагує в застосунку (Supabase public.site_content). Вбудовані дані вище — запасні. ===== */
+const SB='https://iiviusmsqaweoeiiylyy.supabase.co',SBK='sb_publishable_TtKTotQNo2-S_JYYtTUIMg_lkgo0XGS'; // publishable key: only what RLS allows anyone to read
+const ZC=['--z1','--z2','--z3','--z6','--z4','--z5','--z7'];
+function applySite(d){
+  if(!d||typeof d!=='object')return false;
+  const b=x=>x&&typeof x==='object'?x:{uk:String(x||''),ru:String(x||'')};
+  if(d.hero){const h=d.hero;for(const lg of ['uk','ru']){
+    if(h.ey&&b(h.ey)[lg])T[lg].heroEy=esc(b(h.ey)[lg]);
+    if(h.h&&b(h.h)[lg])T[lg].heroH=esc(b(h.h)[lg])+(h.accent&&b(h.accent)[lg]?' <em>'+esc(b(h.accent)[lg])+'</em>':'');
+    if(h.p&&b(h.p)[lg])T[lg].heroP=esc(b(h.p)[lg]);}}
+  if(Array.isArray(d.zones)&&d.zones.length)C.zones=d.zones.map((z,i)=>({m2:+z.m2||0,c:ZC[i%ZC.length],n:z.n}));
+  if(Array.isArray(d.amen)||d.amenList){const l=d.amenList;C.amen=(d.amen||[]).map(a=>({v:a.v,u:{uk:'',ru:''},t:a.t,d:a.d})).concat(l&&l.items&&l.items.length?[{v:l.title,list:l.items}]:[]);}
+  if(Array.isArray(d.adults))C.adults=d.adults;
+  if(Array.isArray(d.kids))C.kids=d.kids;
+  const has=x=>x&&(x.uk||x.ru);
+  if(Array.isArray(d.prices))C.prices=d.prices.map(g=>({...g,note:has(g.note)?g.note:null,items:(g.items||[]).map(i=>({...i,p:+i.p||0,s:has(i.s)?i.s:null}))}));
+  if(d.contacts){const c=d.contacts;if(c.phone)C.phone=c.phone;if(has(c.addr))C.addr=c.addr;if(c.instagram)C.instagram=String(c.instagram).replace(/^@/,'');}
+  C.real=!!d.real;
+  return true;
+}
+try{const cached=JSON.parse(localStorage.getItem('sporthub-site')||'null');if(cached)applySite(cached);}catch(e){}
+fetch(SB+'/rest/v1/site_content?id=eq.1&select=data',{headers:{apikey:SBK,Authorization:'Bearer '+SBK}})
+  .then(r=>r.ok?r.json():null).then(rows=>{const d=rows&&rows[0]&&rows[0].data;if(!d||!Object.keys(d).length)return;
+    let same=false;try{same=localStorage.getItem('sporthub-site')===JSON.stringify(d);localStorage.setItem('sporthub-site',JSON.stringify(d));}catch(e){}
+    if(!same&&applySite(d))render();}).catch(()=>{});
 render();
 })();
 </script>
