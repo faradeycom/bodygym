@@ -534,6 +534,7 @@ function applySite(d){
     if(h.ey&&b(h.ey)[lg])T[lg].heroEy=esc(b(h.ey)[lg]);
     if(h.h&&b(h.h)[lg])T[lg].heroH=esc(b(h.h)[lg])+(h.accent&&b(h.accent)[lg]?' <em>'+esc(b(h.accent)[lg])+'</em>':'');
     if(h.p&&b(h.p)[lg])T[lg].heroP=esc(b(h.p)[lg]);}}
+  if(Array.isArray(d.equip)&&d.equip.length)C.equip=d.equip.map(e=>({...e,n:+e.n||0,stat:e.stat!==false}));
   if(Array.isArray(d.zones)&&d.zones.length)C.zones=d.zones.map((z,i)=>({m2:+z.m2||0,c:ZC[i%ZC.length],n:z.n}));
   if(Array.isArray(d.amen)||d.amenList){const l=d.amenList;C.amen=(d.amen||[]).map(a=>({v:a.v,u:{uk:'',ru:''},t:a.t,d:a.d})).concat(l&&l.items&&l.items.length?[{v:l.title,list:l.items}]:[]);}
   if(Array.isArray(d.adults))C.adults=d.adults;
@@ -544,11 +545,28 @@ function applySite(d){
   C.real=!!d.real;
   return true;
 }
-try{const cached=JSON.parse(localStorage.getItem('sporthub-site')||'null');if(cached)applySite(cached);}catch(e){}
-fetch(SB+'/rest/v1/site_content?id=eq.1&select=data',{headers:{apikey:SBK,Authorization:'Bearer '+SBK}})
-  .then(r=>r.ok?r.json():null).then(rows=>{const d=rows&&rows[0]&&rows[0].data;if(!d||!Object.keys(d).length)return;
-    let same=false;try{same=localStorage.getItem('sporthub-site')===JSON.stringify(d);localStorage.setItem('sporthub-site',JSON.stringify(d));}catch(e){}
-    if(!same&&applySite(d))render();}).catch(()=>{});
+// working hours: one value for the whole project (settings.data.hours, edited in the app)
+const okHours=h=>Array.isArray(h)&&h.length===7&&h.every(x=>x===null||(Array.isArray(x)&&x.length===2&&x.every(v=>/^\d{2}:\d{2}$/.test(v))))&&h.some(Boolean);
+function applyHours(h){if(!okHours(h))return false;C.hours=h;return true;}
+// trainers and administration: staff marked «На сайті» in the app (view site_staff)
+function applyStaff(list){
+  if(!Array.isArray(list)||!list.length)return false;
+  const split=x=>String(x||'').split(',').map(v=>v.trim()).filter(Boolean);
+  const trs=list.filter(s=>(s.roles||[]).includes('trainer'));
+  const adm=list.filter(s=>!(s.roles||[]).includes('trainer'));
+  if(trs.length)C.trainers=trs.map(s=>({n:s.name,r:{uk:s.pos_uk||'Тренер',ru:s.pos_ru||s.pos_uk||'Тренер'},s:{uk:split(s.spec_uk),ru:split(s.spec_ru||s.spec_uk)},y:s.years||0,photo:s.photo_url||''}));
+  if(adm.length)C.staff=adm.map(s=>{const own=(s.roles||[]).includes('owner');return{n:s.name,r:{uk:s.pos_uk||(own?'Керівник залу':'Адміністратор'),ru:s.pos_ru||s.pos_uk||(own?'Руководитель зала':'Администратор')}};});
+  return true;
+}
+const SRC=[['sporthub-site',applySite,'site_content?id=eq.1&select=data',r=>r[0]&&r[0].data&&Object.keys(r[0].data).length?r[0].data:null],
+           ['sporthub-hours',applyHours,'settings?id=eq.1&select=hours:data->hours',r=>r[0]&&r[0].hours],
+           ['sporthub-staff',applyStaff,'site_staff?select=name,roles,pos_uk,pos_ru,spec_uk,spec_ru,years,photo_url&order=name',r=>r&&r.length?r:null]];
+for(const [k,fn] of SRC){try{const c=JSON.parse(localStorage.getItem(k)||'null');if(c)fn(c);}catch(e){}}
+Promise.all(SRC.map(([k,fn,q,pick])=>fetch(SB+'/rest/v1/'+q,{headers:{apikey:SBK,Authorization:'Bearer '+SBK}})
+  .then(r=>r.ok?r.json():null).then(rows=>{const d=rows&&pick(rows);if(!d)return false;
+    let same=false;try{same=localStorage.getItem(k)===JSON.stringify(d);localStorage.setItem(k,JSON.stringify(d));}catch(e){}
+    return !same&&fn(d);}).catch(()=>false)))
+  .then(ch=>{if(ch.some(Boolean))render();});
 render();
 })();
 </script>
