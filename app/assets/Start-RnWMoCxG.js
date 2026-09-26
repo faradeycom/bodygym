@@ -1,0 +1,1 @@
+import{C as e,it as t,t as n,u as r}from"./_plugin-vue_export-helper-DWrogePR.js";var i={},a={class:`muted`};function o(n,i){return e(),r(`p`,a,t(n.$t(`app.loading`)),1)}var s=n(i,[[`render`,o]]);export{s as default};

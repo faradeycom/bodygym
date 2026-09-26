@@ -1,0 +1,1 @@
+import{C as e,it as t,s as n,t as r,u as i}from"./_plugin-vue_export-helper-DWrogePR.js";var a={},o={class:`stack`},s={class:`muted`};function c(r,a){return e(),i(`div`,o,[n(`h1`,null,t(r.$t(`cfg.title`)),1),n(`p`,s,t(r.$t(`cfg.text`)),1)])}var l=r(a,[[`render`,c]]);export{l as default};
