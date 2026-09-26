@@ -542,9 +542,17 @@ function applySite(d){
   if(Array.isArray(d.kids))C.kids=d.kids;
   const has=x=>x&&(x.uk||x.ru);
   if(Array.isArray(d.prices))C.prices=d.prices.map(g=>({...g,note:has(g.note)?g.note:null,items:(g.items||[]).map(i=>({...i,p:+i.p||0,s:has(i.s)?i.s:null}))}));
+  if(C.plans)applyPlans(C.plans);
   if(d.contacts){const c=d.contacts;if(c.phone)C.phone=c.phone;if(has(c.addr))C.addr=c.addr;if(c.instagram)C.instagram=String(c.instagram).replace(/^@/,'');}
   C.real=!!d.real;
   return true;
+}
+// memberships: the sale plans of the app (view site_plans) fill the price group marked «plans» in the site editor
+const planSub=p=>p.visits==null?{uk:'безліміт, '+p.days+' днів',ru:'безлимит, '+p.days+' дней'}:p.visits===1?null:{uk:p.visits+' відвідувань, '+p.days+' днів',ru:p.visits+' посещений, '+p.days+' дней'};
+function applyPlans(list){
+  if(!Array.isArray(list)||!list.length)return false;C.plans=list;
+  const g=C.prices.find(x=>x.plans)||C.prices.find(x=>/абонемент/i.test(tr(x.t)));if(!g)return false;
+  g.items=list.map(p=>({n:{uk:p.name_uk,ru:p.name_ru||p.name_uk},s:planSub(p),p:+p.price||0}));return true;
 }
 // working hours: one value for the whole project (settings.data.hours, edited in the app)
 const okHours=h=>Array.isArray(h)&&h.length===7&&h.every(x=>x===null||(Array.isArray(x)&&x.length===2&&x.every(v=>/^\d{2}:\d{2}$/.test(v))))&&h.some(Boolean);
@@ -561,6 +569,7 @@ function applyStaff(list){
 }
 const SRC=[['sporthub-site',applySite,'site_content?id=eq.1&select=data',r=>r[0]&&r[0].data&&Object.keys(r[0].data).length?r[0].data:null],
            ['sporthub-hours',applyHours,'settings?id=eq.1&select=hours:data->hours',r=>r[0]&&r[0].hours],
+           ['sporthub-plans',applyPlans,'site_plans?select=name_uk,name_ru,price,visits,days,sort&order=sort',r=>r&&r.length?r:null],
            ['sporthub-staff',applyStaff,'site_staff?select=name,roles,pos_uk,pos_ru,spec_uk,spec_ru,years,photo_url,bio_uk,bio_ru&order=name',r=>r&&r.length?r:null]];
 for(const [k,fn] of SRC){try{const c=JSON.parse(localStorage.getItem(k)||'null');if(c)fn(c);}catch(e){}}
 Promise.all(SRC.map(([k,fn,q,pick])=>fetch(SB+'/rest/v1/'+q,{headers:{apikey:SBK,Authorization:'Bearer '+SBK}})
