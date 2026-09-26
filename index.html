@@ -51,6 +51,7 @@ nav.links a:hover{color:var(--ink);background:var(--surface2)}
 .seg button{border:0;background:transparent;color:var(--muted);font:600 12px var(--body);padding:6px 9px;cursor:pointer;letter-spacing:.04em}
 .seg button.on{background:var(--ink);color:var(--bg)}
 [hidden]{display:none!important}
+.tm .bio{grid-column:1 / -1;margin:0;font-size:14px;color:var(--muted);line-height:1.45}
 .demo{font-size:13px;color:var(--muted);background:var(--surface2);border:1px dashed var(--line);border-radius:8px;padding:8px 12px;margin-top:16px}
 
 /* type */
@@ -473,7 +474,7 @@ function render(){
    <div class="col"><h3>${l.kids}</h3>${C.kids.map(c=>cls(c,true)).join('')}</div></div>`;
 
   document.getElementById('teamIn').innerHTML=head(l.teamEy,l.teamH,l.teamP)+`
-   <div class="team">${C.trainers.map((t,i)=>`<div class="tm" id="tr-${i}"><div class="mono">${t.photo?`<img src="${t.photo}" alt="${esc(nm(t.n))}">`:esc(nm(t.n)[0])}</div><div><h3>${esc(nm(t.n))}</h3><div class="role">${esc(tr(t.r))}</div></div>
+   <div class="team">${C.trainers.map((t,i)=>`<div class="tm" id="tr-${i}"><div class="mono">${t.photo?`<img src="${t.photo}" alt="${esc(nm(t.n))}">`:esc(nm(t.n)[0])}</div><div><h3>${esc(nm(t.n))}</h3><div class="role">${esc(tr(t.r))}</div></div>${tr(t.bio)?`<p class="bio">${esc(tr(t.bio))}</p>`:''}
     <div class="tags">${tr(t.s).map(s=>`<span class="pill">${esc(s)}</span>`).join('')}</div>${t.y?`<div class="yrs num">${t.y} ${l.yrs}</div>`:''}</div>`).join('')}</div>
    <div class="staff"><h3>${l.staffH}</h3><div class="stafflist">${C.staff.map(s=>`<div><b>${esc(nm(s.n))}</b><span>${esc(tr(s.r))}</span></div>`).join('')}</div></div>`;
 
@@ -554,13 +555,13 @@ function applyStaff(list){
   const split=x=>String(x||'').split(',').map(v=>v.trim()).filter(Boolean);
   const trs=list.filter(s=>(s.roles||[]).includes('trainer'));
   const adm=list.filter(s=>!(s.roles||[]).includes('trainer'));
-  if(trs.length)C.trainers=trs.map(s=>({n:s.name,r:{uk:s.pos_uk||'Тренер',ru:s.pos_ru||s.pos_uk||'Тренер'},s:{uk:split(s.spec_uk),ru:split(s.spec_ru||s.spec_uk)},y:s.years||0,photo:s.photo_url||''}));
+  if(trs.length)C.trainers=trs.map(s=>({n:s.name,r:{uk:s.pos_uk||'Тренер',ru:s.pos_ru||s.pos_uk||'Тренер'},s:{uk:split(s.spec_uk),ru:split(s.spec_ru||s.spec_uk)},y:s.years||0,photo:s.photo_url||'',bio:{uk:s.bio_uk||'',ru:s.bio_ru||s.bio_uk||''}}));
   if(adm.length)C.staff=adm.map(s=>{const own=(s.roles||[]).includes('owner');return{n:s.name,r:{uk:s.pos_uk||(own?'Керівник залу':'Адміністратор'),ru:s.pos_ru||s.pos_uk||(own?'Руководитель зала':'Администратор')}};});
   return true;
 }
 const SRC=[['sporthub-site',applySite,'site_content?id=eq.1&select=data',r=>r[0]&&r[0].data&&Object.keys(r[0].data).length?r[0].data:null],
            ['sporthub-hours',applyHours,'settings?id=eq.1&select=hours:data->hours',r=>r[0]&&r[0].hours],
-           ['sporthub-staff',applyStaff,'site_staff?select=name,roles,pos_uk,pos_ru,spec_uk,spec_ru,years,photo_url&order=name',r=>r&&r.length?r:null]];
+           ['sporthub-staff',applyStaff,'site_staff?select=name,roles,pos_uk,pos_ru,spec_uk,spec_ru,years,photo_url,bio_uk,bio_ru&order=name',r=>r&&r.length?r:null]];
 for(const [k,fn] of SRC){try{const c=JSON.parse(localStorage.getItem(k)||'null');if(c)fn(c);}catch(e){}}
 Promise.all(SRC.map(([k,fn,q,pick])=>fetch(SB+'/rest/v1/'+q,{headers:{apikey:SBK,Authorization:'Bearer '+SBK}})
   .then(r=>r.ok?r.json():null).then(rows=>{const d=rows&&pick(rows);if(!d)return false;
