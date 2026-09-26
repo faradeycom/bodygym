@@ -1,0 +1,1 @@
+import{S as e,l as t,rt as n}from"./runtime-core.esm-bundler-eFRYB3kN.js";import{h as r}from"./index-CKMSMwZL.js";var i={},a={class:`muted`};function o(r,i){return e(),t(`p`,a,n(r.$t(`app.loading`)),1)}var s=r(i,[[`render`,o]]);export{s as default};
