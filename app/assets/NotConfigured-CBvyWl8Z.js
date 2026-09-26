@@ -1,0 +1,1 @@
+import{S as e,l as t,o as n,rt as r}from"./runtime-core.esm-bundler-eFRYB3kN.js";import{p as i}from"./index-C72LvvRY.js";var a={},o={class:`stack`},s={class:`muted`};function c(i,a){return e(),t(`div`,o,[n(`h1`,null,r(i.$t(`cfg.title`)),1),n(`p`,s,r(i.$t(`cfg.text`)),1)])}var l=i(a,[[`render`,c]]);export{l as default};
